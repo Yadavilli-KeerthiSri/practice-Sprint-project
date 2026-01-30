@@ -1,0 +1,54 @@
+package com.cg.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "customers")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
+public class Customer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
+    private Long customerId; // customer_Id
+
+    @NotBlank(message = "Customer name is required")
+    @Column(name = "customer_name", nullable = false)
+    private String customerName; // customer_Name
+
+    @NotBlank(message = "Contacts is required")
+    @Column(name = "contacts", nullable = false)
+    private String contacts; // Contacts (e.g., phone or list in CSV)
+
+    @Email(message = "Invalid email")
+    @NotBlank(message = "Email is required")
+    @Column(name = "email", unique = true, nullable = false)
+    private String email; // Email
+
+    @NotBlank(message = "Address is required")
+    @Column(name = "address", nullable = false, length = 1024)
+    private String address; // Address
+
+    // One customer -> many payments
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Payment> payments = new ArrayList<>();
+
+    // Helper for bidirectional consistency
+    public void addPayment(Payment payment) {
+        payments.add(payment);
+        payment.setCustomer(this);
+    }
+
+    public void removePayment(Payment payment) {
+        payments.remove(payment);
+        payment.setCustomer(null);
+    }
+}

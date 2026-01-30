@@ -1,0 +1,13 @@
+package com.cg.service;
+
+import com.cg.DTO.PaymentDTO;
+
+import java.util.List;
+
+public interface PaymentService {
+    PaymentDTO create(PaymentDTO dto);
+    PaymentDTO getById(Long id);
+    List<PaymentDTO> getByCustomer(Long customerId);
+    PaymentDTO updateStatus(Long paymentId, String newStatus);
+    void delete(Long id);
+}

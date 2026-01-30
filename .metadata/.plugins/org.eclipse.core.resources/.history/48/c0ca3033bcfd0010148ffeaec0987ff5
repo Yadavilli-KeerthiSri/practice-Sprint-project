@@ -1,0 +1,15 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+//import com.cg.dto.CustomerDTO;
+import com.cg.entity.Customer;
+
+public interface ICustomerService {
+    Customer create(Customer customer);
+    Customer getById(Long id);
+    List<Customer> getAll();
+    Customer update(Long id, Customer customer);
+    void delete(Long id);
+}
+

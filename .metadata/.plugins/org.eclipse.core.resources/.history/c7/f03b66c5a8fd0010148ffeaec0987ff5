@@ -1,0 +1,48 @@
+package com.cg.DTO;
+
+public class ProductDTO {
+	private int id;
+	private String pname;
+	private double price;
+	private long categoryid;
+	private String categoryname;
+
+	
+	
+	
+
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getPname() {
+		return pname;
+	}
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public long getCategoryid() {
+		return categoryid;
+	}
+	public void setCategoryid(long categoryid) {
+		this.categoryid = categoryid;
+	}
+	public String getCategoryname() {
+		return categoryname;
+	}
+	public void setCategoryname(String categoryname) {
+		this.categoryname = categoryname;
+	}
+	
+	
+	
+
+}

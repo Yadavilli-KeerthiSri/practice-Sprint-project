@@ -1,0 +1,70 @@
+package com.cg.service.impl;
+
+import com.cg.DTO.CustomerDTO;
+import com.cg.DTO.Mapper;
+import com.cg.exception.BadRequestException;
+import com.cg.exception.ResourceNotFoundException;
+import com.cg.model.Customer;
+import com.cg.repository.CustomerRepository;
+import com.cg.service.CustomerService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Transactional
+public class CustomerServiceImpl implements CustomerService {
+
+    private final CustomerRepository customerRepository = null;
+
+    @Override
+    public CustomerDTO create(CustomerDTO dto) {
+        if (customerRepository.existsByEmail(dto.getEmail())) {
+            throw new BadRequestException("Email already registered");
+        }
+        Customer customer = Customer.builder()
+                .customerName(dto.getCustomerName())
+                .contacts(dto.getContacts())
+                .email(dto.getEmail())
+                .address(dto.getAddress())
+                .build();
+        return Mapper.toCustomerDTO(customerRepository.save(customer));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CustomerDTO getById(Long id) {
+        Customer c = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + id));
+        return Mapper.toCustomerDTO(c);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CustomerDTO> getAll() {
+        return customerRepository.findAll().stream()
+                .map(Mapper::toCustomerDTO).toList();
+    }
+
+    @Override
+    public CustomerDTO update(Long id, CustomerDTO dto) {
+        Customer c = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + id));
+
+        // Prevent duplicate email on update
+        customerRepository.findByEmail(dto.getEmail())
+                .filter(existing -> !existing.getCustomerId().equals(id))
+                .ifPresent(existing -> { throw new BadRequestException("Email already in use"); });
+
+        Mapper.updateCustomerFromDTO(dto, c);
+        return Mapper.toCustomerDTO(customerRepository.save(c));
+    }
+
+    @Override
+    public void delete(Long id) {
+        Customer c = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + id));
+        customerRepository.delete(c);
+    }
+}

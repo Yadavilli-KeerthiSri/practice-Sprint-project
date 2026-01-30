@@ -1,0 +1,70 @@
+package com.cg.dto;
+
+import com.cg.model.TransactionStatus;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
+
+
+public class PaymentDTO {
+
+    private Long paymentId;
+
+    @NotBlank(message = "Payment name is required")
+    private String paymentName;
+
+    @NotNull(message = "Amount is required")
+    @Min(value = 0, message = "Amount must be >= 0")
+    private BigDecimal amount;
+
+    @NotNull(message = "Transaction status is required")
+    private TransactionStatus transactionStatus;
+
+    @NotNull(message = "customerId is required")
+    private Long customerId;
+
+	public Long getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(Long paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public String getPaymentName() {
+		return paymentName;
+	}
+
+	public void setPaymentName(String paymentName) {
+		this.paymentName = paymentName;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public TransactionStatus getTransactionStatus() {
+		return transactionStatus;
+	}
+
+	public void setTransactionStatus(TransactionStatus transactionStatus) {
+		this.transactionStatus = transactionStatus;
+	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	
+}
+

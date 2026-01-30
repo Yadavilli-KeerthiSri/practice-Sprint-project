@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Product</title>
+</head>
+<body>
+    <h1>Delete Product</h1>
+    
+   <form th:action="@{/api/add}" th:object="${product}" method="post">
+    <label>Name:</label>
+    <input type="text" th:field="*{pname}" required />
+    <label>Price:</label>
+    <input type="number" th:field="*{price}" step="0.01" required />
+    <button type="submit">Delete Product</button>
+</form>
+
+    <br>
+    <a th:href="@{/api/list}">View All Products</a>
+</body>
+</html>
