@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+</head>
+<body>
+
+<!-- Restaurant Header -->
+<h1>Menu for <span th:text="${restaurant.restaurantName}"></span></h1>
+<p>
+    Cuisine: <span th:text="${restaurant.cuisine}"></span><br>
+    Address: <span th:text="${restaurant.address}"></span><br>
+    Ratings: <span th:text="${restaurant.ratings}"></span><br>
+</p>
+
+<!-- Menu Table -->
+<table border="1">
+    <tr>
+        <th>Item ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+    </tr>
+
+    <tr th:each="item : ${items}">
+        <td th:text="${item.itemId}"></td>
+        <td th:text="${item.itemName}"></td>
+        <td th:text="${item.category}"></td>
+        <td th:text="${item.price}"></td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(items)}">
+        <td colspan="4">No items found for this restaurant.</td>
+    </tr>
+</table>
+
+<!-- BACK BUTTON -->
+<br>
+<a href="/restaurants">Back to Restaurants</a>
+
+</body>
+</html>

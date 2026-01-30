@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restaurant List</title>
+    <style>
+        table { border-collapse: collapse; }
+        th, td { border: 1px solid gray; padding: 6px 10px; }
+        th { background: #eee; }
+        .searchbar input { padding: 6px; }
+    </style>
+</head>
+<body>
+
+<h1>Restaurant List</h1>
+
+<!-- Search Bar (Name Search) -->
+<form method="get" th:action="@{/restaurants}" class="searchbar">
+    <input type="text" name="name" placeholder="Search by name" th:value="${name}">
+    <button type="submit">Search</button>
+</form>
+
+<br>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Cuisine</th>
+        <th>Address</th>
+        <th>Ratings</th>
+        <th>Menu</th>
+    </tr>
+
+    <tr th:each="r : ${restaurants}">
+        <td th:text="${r.restaurantId}"></td>
+        <td th:text="${r.restaurantName}"></td>
+
+        <!-- Cuisine dropdown INSIDE TABLE -->
+        <td>
+            <form th:action="@{/restaurants}" method="get">
+                <input type="hidden" name="name" th:value="${name}">
+                <select name="cuisine" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    <option th:each="c : ${cuisines}"
+                            th:value="${c}"
+                            th:text="${c}"
+                            th:selected="${selectedCuisine == c}">
+                    </option>
+                </select>
+            </form>
+        </td>
+
+        <td th:text="${r.address}"></td>
+        <td th:text="${r.ratings}"></td>
+
+        <td>
+            @{View Menu</a>
+        </td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(restaurants)}">
+        <td colspan="6">No restaurants found.</td>
+    </tr>
+</table>
+
+</body>
+</html>

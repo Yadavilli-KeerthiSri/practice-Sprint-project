@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu Item Form</title>
+</head>
+<body>
+<h1 th:text="${menuItem.itemId != null} ? 'Edit Menu Item' : 'Add Menu Item'"></h1>
+
+<form th:action="@{${menuItem.itemId != null} ? '/menu/' + ${menuItem.itemId} : '/menu'}"
+      method="post"
+      th:object="${menuItem}">
+
+    <label>Item Name</label><br>
+    <input type="text" th:field="*{itemName}" required><br><br>
+
+    <label>Category</label><br>
+    <input type="text" th:field="*{category}" required><br><br>
+
+    <label>Price</label><br>
+    <input type="number" step="0.01" th:field="*{price}" required><br><br>
+
+    <label>Restaurant</label><br>
+    <select th:field="*{restaurant.restaurantId}">
+        <option th:each="r : ${restaurants}"
+                th:value="${r.restaurantId}"
+                th:text="${r.restaurantName}">
+        </option>
+    </select><br><br>
+
+    <button type="submit">Save</button>
+</form>
+
+<br>
+<a th:href="@{/menu}">Back to Menu</a>
+
+</body>
+</html>
