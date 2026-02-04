@@ -1,0 +1,81 @@
+package com.cg.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "payment_1")
+public class Payment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
+    private Integer paymentId; // payment_Id
+
+    @NotBlank(message = "Payment name is required")
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod; // payment_Method (e.g., "UPI", "Card", "COD")
+
+    @NotNull(message = "Amount is required")
+    @Min(value = 0, message = "Amount must be >= 0")
+    @Column(name = "amount", nullable = false, precision = 12, scale = 2)
+    private float amount; // Amount
+
+    @NotNull(message = "Transaction status is required")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_status", nullable = false)
+    private TransactionStatus transactionStatus; // TransactionStatus
+    
+    // One payment -> one order
+    @OneToOne(mappedBy = "payment")
+    private Order order;
+
+    // Many payments -> one customer
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "customer_id", nullable = false,
+//            foreignKey = @ForeignKey(name = "fk_payment_customer"))
+//    private Customer customer;
+
+	public Integer getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(Integer paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		this.amount = amount;
+	}
+
+	public TransactionStatus getTransactionStatus() {
+		return transactionStatus;
+	}
+
+	public void setTransactionStatus(TransactionStatus transactionStatus) {
+		this.transactionStatus = transactionStatus;
+	}
+
+//	public Customer getCustomer() {
+//		return customer;
+//	}
+//
+//	public void setCustomer(Customer customer) {
+//		this.customer = customer;
+//	}
+}
+

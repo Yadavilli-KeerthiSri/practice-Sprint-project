@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #ffffff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .price {
+            color: green;
+            font-weight: bold;
+        }
+        .empty {
+            color: #888;
+            font-style: italic;
+        }
+        .back {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🔍 Search Results</h1>
+
+<!-- Restaurants Section -->
+<div class="section">
+    <h2>Restaurants</h2>
+
+    <div th:if="${#lists.isEmpty(restaurants)}" class="empty">
+        No restaurants found
+    </div>
+
+    <div th:each="r : ${restaurants}" class="card">
+        <h3 th:text="${r.restaurantName}"></h3>
+        <p><b>Location:</b> <span th:text="${r.address}"></span></p>
+        <p><b>Cuisine:</b> <span th:text="${r.cuisine}"></span></p>
+        <p><b>Rating:</b> <span th:text="${r.ratings}"></span></p>
+    </div>
+</div>
+
+<!-- Menu Items Section -->
+<div class="section">
+    <h2>Menu Items</h2>
+
+    <div th:if="${#lists.isEmpty(menuItems)}" class="empty">
+        No menu items found
+    </div>
+
+    <div th:each="item : ${menuItems}" class="card">
+        <h3 th:text="${item.itemName}"></h3>
+        <p><b>Category:</b> <span th:text="${item.category}"></span></p>
+        <p class="price">₹ <span th:text="${item.price}"></span></p>
+
+        <!-- Optional Add to Cart button -->
+        <form th:action="@{/cart/add}" method="post">
+            <input type="hidden" name="itemId" th:value="${item.itemId}">
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+</div>
+
+<!-- Back Button -->
+<div class="back">
+    <a th:href="@{/user/dashboard}">⬅ Back to Dashboard</a>
+</div>
+
+</body>
+</html>

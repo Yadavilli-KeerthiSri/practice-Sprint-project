@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h2>Admin Dashboard</h2>
+ 
+<a href="/admin/orders">Manage Orders</a> |
+<a href="/restaurants">Restaurants</a> |
+<a href="/menu-items">Menu Items</a> |
+<a href="/agents">Delivery Agents</a> |
+<a href="/admin/users">Users</a> |
+<a href="/logout">Logout</a>
+ 
+<hr>
+ 
+<div>
+    <h3>System Overview</h3>
+    <p>Total Restaurants: <b th:text="${restaurants}"></b></p>
+    <p>Total Agents: <b th:text="${agents}"></b></p>
+    <p>Total Orders: <b th:text="${orders}"></b></p>
+    <p>Total Users: <b th:text="${users}"></b></p>
+</div>
+ 
+</body>
+</html>

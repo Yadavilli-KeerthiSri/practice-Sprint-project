@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Add Menu Item</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  width:420px; margin:40px auto; background:white;
+  padding:25px; border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; text-align:center; }
+input, select, button {
+  width:100%; padding:10px; margin-top:12px;
+  border-radius:6px; border:1px solid #ccc;
+}
+button { background:#ff5722; color:white; border:none; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Add Menu Item</h2>
+ 
+<form action="/menu/save" method="post">
+<input name="name" placeholder="Item Name" required>
+<input name="category" placeholder="Category (Veg / Non-Veg)" required>
+<input name="price" placeholder="Price" required>
+ 
+<select name="restaurant.restaurantId" required>
+<option value="">Select Restaurant</option>
+<option th:each="r : ${restaurants}"
+        th:value="${r.restaurantId}"
+        th:text="${r.name}">
+</option>
+</select>
+ 
+<button>Add Item</button>
+</form>
+</div>
+ 
+</body>
+</html>

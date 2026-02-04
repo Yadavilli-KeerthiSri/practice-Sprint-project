@@ -1,0 +1,46 @@
+package com.cg.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.DeliveryAgent;
+import com.cg.exception.ResourceNotFound;
+import com.cg.iservice.IDeliveryAgentService;
+import com.cg.repository.DeliveryAgentRepository;
+
+@Service
+public class DeliveryAgentService implements IDeliveryAgentService{
+	 @Autowired
+	    private DeliveryAgentRepository agentRepository;
+	 
+	    @Override
+	    public DeliveryAgent createAgent(DeliveryAgent agent) {
+	        return agentRepository.save(agent);
+	    }
+	 
+	    @Override
+	    public DeliveryAgent updateAgent(Integer id, DeliveryAgent agent) throws ResourceNotFound {
+	        DeliveryAgent existing = getAgentById(id);
+	        existing.setAgentName(agent.getAgentName());
+	        existing.setContact(agent.getContact());
+	        existing.setVehicleDetails(agent.getVehicleDetails());
+	        existing.setAvailability(agent.getAvailability());
+	        return agentRepository.save(existing);
+	    }
+	 
+	    @Override
+	    public DeliveryAgent getAgentById(Integer id) throws ResourceNotFound {
+	        return agentRepository.findById(id)
+	                .orElseThrow(() -> new ResourceNotFound("Agent not found"));
+	    }
+	 
+	    @Override
+	    public List<DeliveryAgent> getAllAgents() {
+	        return agentRepository.findAll();
+	    }
+	 
+	    @Override
+	    public void deleteAgent(Integer id) throws ResourceNotFound {
+	        agentRepository.delete(getAgentById(id));
+	    }
+}

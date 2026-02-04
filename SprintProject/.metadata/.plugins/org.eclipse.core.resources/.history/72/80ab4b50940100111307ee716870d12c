@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search for: <span th:text="${keyword}"></span></h1>
+    
+    <h2>Restaurants (<span th:text="${restaurants.size()}"></span>)</h2>
+    <ul>
+        <li th:each="r : ${restaurants}">
+            <span th:text="${r.restaurantName}"></span> - 
+            <span th:text="${r.location}"></span>
+        </li>
+    </ul>
+
+    <h2>Dishes (<span th:text="${menuItems.size()}"></span>)</h2>
+    <ul>
+        <li th:each="item : ${menuItems}">
+            <span th:text="${item.itemName}"></span> - 
+            ₹<span th:text="${item.price}"></span>
+        </li>
+    </ul>
+</body>
+</html>

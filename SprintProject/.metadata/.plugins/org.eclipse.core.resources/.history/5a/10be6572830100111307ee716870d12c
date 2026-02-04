@@ -1,0 +1,35 @@
+package com.cg.controller.admin;
+
+import com.cg.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/admin/order")
+public class AdminOrderController {
+
+    @Autowired
+    private OrderService orderService;
+
+    /* LIST */
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("orders", orderService.getAll());
+        return "admin/orders";
+    }
+
+    /* UPDATE STATUS */
+    @PostMapping("/update/{id}")
+    public String updateStatus(@PathVariable Long id) {
+        orderService.updateStatus(id);
+        return "redirect:/admin/order";
+    }
+    
+    @GetMapping("/admin/orders")
+    public String viewOrders(Model model) {
+        model.addAttribute("orders", orderService.getAll());
+        return "admin/orders";
+    }
+}

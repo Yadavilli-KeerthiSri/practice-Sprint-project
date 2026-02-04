@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Delivery Agents</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  background:white;
+  margin:30px;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+.available { color:green; font-weight:bold; }
+.not { color:red; font-weight:bold; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Delivery Agents</h2>
+ 
+<table width="100%">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Vehicle</th>
+<th>Availability</th>
+</tr>
+ 
+<tr th:each="a : ${agents}">
+<td th:text="${a.agentId}"></td>
+<td th:text="${a.name}"></td>
+<td th:text="${a.phone}"></td>
+<td th:text="${a.vehicle}"></td>
+<td>
+<span th:text="${a.available ? 'Available' : 'Busy'}"
+      th:class="${a.available ? 'available' : 'not'}"></span>
+</td>
+</tr>
+</table>
+ 
+</div>
+</body>
+</html>

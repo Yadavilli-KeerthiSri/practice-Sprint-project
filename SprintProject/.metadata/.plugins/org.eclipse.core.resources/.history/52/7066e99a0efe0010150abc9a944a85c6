@@ -1,0 +1,50 @@
+package com.cg.controller;
+
+//import com.cg.dto.CustomerDTO;
+//import com.cg.exception.ResourceNotFound;
+import com.cg.entity.Customer;
+import com.cg.iservice.ICustomerService;
+
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/customers")
+public class CustomerController {
+	@Autowired private ICustomerService service;
+
+    @GetMapping
+    public String listCustomers(Model model) {
+        model.addAttribute("customers", service.getAllCustomers());
+        return "customer-list"; // renders customer-list.html
+    }
+
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "customer-form";
+    }
+    
+    @PostMapping("/save")
+    public String saveCustomer(@Valid @ModelAttribute("customer") Customer customer, BindingResult result) {
+        if (result.hasErrors()) return "customer-form";
+        service.saveCustomer(customer);
+        return "redirect:/customers";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        model.addAttribute("customer", service.getCustomerById(id));
+        return "customer-form";
+    }
+    
+    @GetMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        service.deleteCustomer(id);
+        return "redirect:/customers";
+    }
+}

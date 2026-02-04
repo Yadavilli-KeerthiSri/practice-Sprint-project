@@ -1,0 +1,12 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.MenuItem;
+
+public interface IMenuItemService {
+	MenuItem saveMenuItem(MenuItem item);
+    MenuItem getMenuItemById(Long id);
+    List<MenuItem> getAllMenuItems();
+    void deleteMenuItem(Long id);
+}

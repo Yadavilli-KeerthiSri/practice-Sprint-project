@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Menu Items</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  background:white;
+  margin:30px;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; }
+table { width:100%; border-collapse:collapse; }
+th, td { padding:12px; border-bottom:1px solid #ddd; }
+th { background:#e3f2fd; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Menu Items</h2>
+ 
+<table>
+<tr>
+<th>ID</th>
+<th>Item Name</th>
+<th>Category</th>
+<th>Price</th>
+<th>Restaurant</th>
+</tr>
+ 
+<tr th:each="m : ${menuItems}">
+<td th:text="${m.itemId}"></td>
+<td th:text="${m.name}"></td>
+<td th:text="${m.category}"></td>
+<td>₹ <span th:text="${m.price}"></span></td>
+<td th:text="${m.restaurant.name}"></td>
+</tr>
+</table>
+ 
+</div>
+</body>
+</html>

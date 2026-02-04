@@ -1,0 +1,60 @@
+package com.cg.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.cg.entity.Order;
+import com.cg.entity.User;
+import com.cg.repository.UserRepository;
+import com.cg.service.OrderService;
+
+@Controller
+public class AuthController {
+	 @Autowired
+	    private UserRepository repo;
+	 
+	    @Autowired
+	    private PasswordEncoder encoder;
+	    
+	    @Autowired
+	    private OrderService orderservice;
+	 
+	    @GetMapping("/login")
+	    public String login() {
+	        return "auth/login";
+	    }
+	 
+	    @GetMapping("/register")
+	    public String registerForm(Model model) {
+	        model.addAttribute("user", new User());
+	        return "auth/register";
+	    }
+	 
+	    @PostMapping("/register")
+	    public String register(@ModelAttribute User user) {
+	        user.setPassword(encoder.encode(user.getPassword()));
+	        user.setRole("ROLE_USER"); // default role
+	        repo.save(user);
+	        return "redirect:/login";
+	    }
+	 
+	    @GetMapping("/dashboard")
+	    public String dashboard(Model model) {
+	        // 1. Fetch data (e.g., from a service)
+	        List<Order> orders = orderService.getAllOrders(); 
+	        
+	        // 2. Add to model (Ensure the name matches the template exactly)
+	        // Use a safe empty list if the service returns null to prevent parsing errors
+	        model.addAttribute("orders", orders != null ? orders : new ArrayList<>());
+	        
+	        return "auth/dashboard"; 
+	    }
+
+}

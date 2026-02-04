@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu Items</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="admin/fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Menu Items</h2>
+
+<a th:href="@{/admin/menu-items/add}">➕ Add Item</a>
+<br><br>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Restaurant</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="i : ${items}">
+        <td th:text="${i.itemName}"></td>
+        <td th:text="${i.category}"></td>
+        <td th:text="${i.price}"></td>
+        <td th:text="${i.restaurant.restaurantName}"></td>
+        <td>
+            <a th:href="@{/admin/menu-items/edit/{id}(id=${i.itemId})}">Edit</a>
+            |
+            <a th:href="@{/admin/menu-items/delete/{id}(id=${i.itemId})}"
+               onclick="return confirm('Delete item?')";>Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

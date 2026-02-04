@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold">Results for: <span th:text="${keyword}"></span></h1>
+            <a th:href="@{/user/dashboard}" class="text-blue-500">Back</a>
+        </div>
+
+        <!-- Restaurants Section -->
+        <div class="mb-12">
+            <h2 class="text-xl font-bold mb-4">Restaurants (<span th:text="${restaurants.size()}">0</span>)</h2>
+            
+            <div th:if="${restaurants.isEmpty()}" class="p-4 bg-white border">No restaurants found.</div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div th:each="r : ${restaurants}" class="bg-white p-4 border rounded-lg">
+                    <h3 class="font-bold" th:text="${r.restaurantName}">Name</h3>
+                    <p class="text-sm text-gray-500" th:text="${r.location}">Location</p>
+                    <p class="text-xs font-bold text-orange-500" th:text="${r.ratings + ' ★'}">0 ★</p>
+                    <span class="text-xs bg-gray-100 p-1" th:text="${r.cuisine}">Cuisine</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Items Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-4">Dishes (<span th:text="${menuItems.size()}">0</span>)</h2>
+
+            <div th:if="${menuItems.isEmpty()}" class="p-4 bg-white border">No dishes found.</div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div th:each="item : ${menuItems}" class="bg-white p-4 border rounded-lg flex justify-between">
+                    <div>
+                        <p class="text-xs text-green-600 font-bold" th:text="${item.category}">Category</p>
+                        <h3 class="font-bold" th:text="${item.itemName}">Item Name</h3>
+                        <p class="font-bold">₹<span th:text="${item.price}">0</span></p>
+                    </div>
+                    
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="hidden" name="itemId" th:value="${item.itemId}" />
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

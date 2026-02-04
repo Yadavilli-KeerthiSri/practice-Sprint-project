@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delivery Agents</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="admin/fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Delivery Agents</h2>
+
+<a th:href="@{/admin/agents/add}">➕ Add Agent</a>
+<br><br>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Vehicle</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="a : ${agents}">
+        <td th:text="${a.agentName}"></td>
+        <td th:text="${a.contact}"></td>
+        <td th:text="${a.vehicleDetails}"></td>
+        <td th:text="${a.availability ? 'Available' : 'Busy'}"></td>
+        <td>
+            <a th:href="@{/admin/agents/edit/{id}(id=${a.agentId})}">Edit</a>
+            |
+            <a th:href="@{/admin/agents/delete/{id}(id=${a.agentId})}">Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

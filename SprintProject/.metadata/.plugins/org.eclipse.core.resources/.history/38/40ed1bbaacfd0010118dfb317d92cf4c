@@ -1,0 +1,47 @@
+package com.cg.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.Order;
+import com.cg.iservice.IOrderService;
+
+@Controller
+@RequestMapping("/api/orders")
+public class OrderController {
+	    @Autowired
+	    private IOrderService orderService;
+
+	    @GetMapping
+	    public List<Order> getAll() {
+	    	return orderService.getAllOrders();
+	    }
+
+	    @GetMapping("/{id}")
+	    public Order getById(@PathVariable Long id) {
+	    	return orderService.getOrderById(id);
+	    }
+	    
+	    @PostMapping
+	    public Order create(@RequestBody Order order) {
+	    	return orderService.createOrder(order);
+	    }
+
+	    @PutMapping("/update/{id}")
+	    public Order update(@PathVariable Long id, @RequestBody Order order) { 
+	        return orderService.updateOrder(id, order); 
+	    }
+
+	    @DeleteMapping("/delete/{id}")
+	    public void delete(@PathVariable Long id) {
+	    	orderService.deleteOrder(id);
+	    }
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restaurants</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="user/fragments/user-navbar :: userNavbar"></div>
+
+<h2>All Restaurants</h2>
+
+<div th:each="r : ${restaurants}">
+    <b th:text="${r.restaurantName}"></b><br>
+    Cuisine: <span th:text="${r.cuisine}"></span><br>
+    Rating: <span th:text="${r.ratings}"></span><br>
+    <a th:href="@{/user/restaurants/{id}(id=${r.restaurantId})}">
+        View Menu
+    </a>
+    <hr>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results for: <span th:text="${keyword}"></span></h1>
+
+    <!-- Restaurants Section -->
+    <div th:if="${restaurants != null}">
+        <h2>Restaurants (<span th:text="${restaurants.size()}">0</span>)</h2>
+        <div th:each="r : ${restaurants}">
+            <p>
+                Name: <span th:text="${r.restaurantName}"></span> | 
+                Location: <span th:text="${r.location}"></span> | <!-- Entity uses 'location' -->
+                Rating: <span th:text="${r.ratings}"></span> <!-- Entity uses 'ratings' -->
+            </p>
+        </div>
+    </div>
+
+    <!-- Menu Items Section -->
+    <div th:if="${menuItems != null}">
+        <h2>Menu Items (<span th:text="${menuItems.size()}">0</span>)</h2>
+        <div th:each="item : ${menuItems}">
+            <p>
+                Item: <span th:text="${item.itemName}"></span> | 
+                Price: <span th:text="${item.price}"></span>
+            </p>
+            <form th:action="@{/cart/add}" method="post">
+                <!-- Entity uses 'itemId' -->
+                <input type="hidden" name="itemId" th:value="${item.itemId}" />
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Payments</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  background:white;
+  margin:30px;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; }
+.SUCCESS { color:green; font-weight:bold; }
+.FAILED { color:red; font-weight:bold; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Payments</h2>
+ 
+<table width="100%">
+<tr>
+<th>ID</th>
+<th>Order ID</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+</tr>
+ 
+<tr th:each="p : ${payments}">
+<td th:text="${p.paymentId}"></td>
+<td th:text="${p.order.orderId}"></td>
+<td>₹ <span th:text="${p.amount}"></span></td>
+<td th:text="${p.method}"></td>
+<td th:text="${p.status}" th:class="${p.status}"></td>
+</tr>
+</table>
+ 
+</div>
+</body>
+</html>

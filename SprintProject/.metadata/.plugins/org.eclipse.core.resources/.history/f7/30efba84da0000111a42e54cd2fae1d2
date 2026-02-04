@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Dashboard</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<----<div th:replace="user/fragments/user-navbar :: userNavbar"></div>---->
+
+<nav>
+    <a th:href="@{/user/dashboard}">Home</a> |
+    <a th:href="@{/user/orders}">My Orders</a> |
+    <a th:href="@{/user/profile}">Profile</a> |
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+
+</body>
+</html>

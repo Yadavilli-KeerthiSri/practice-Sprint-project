@@ -1,0 +1,19 @@
+@GetMapping("/user/search")
+public String search(@RequestParam(name = "keyword", defaultValue = "") String keyword, Model model) {
+    // 1. Fetch data from repositories
+    var resList = restaurantRepository.findByRestaurantNameContainingIgnoreCase(keyword);
+    var itemList = menuItemRepository.findByItemNameContainingIgnoreCase(keyword);
+
+    // 2. Log results to console to verify data flow
+    System.out.println("Search Keyword: " + keyword);
+    System.out.println("Restaurants Found: " + (resList != null ? resList.size() : "NULL"));
+
+    // 3. Prevent crashes by ensuring lists are never null
+    model.addAttribute("restaurants", resList != null ? resList : new java.util.ArrayList<>());
+    model.addAttribute("menuItems", itemList != null ? itemList : new java.util.ArrayList<>());
+    
+    // CRITICAL: Ensure this matches the variable name in your HTML
+    model.addAttribute("keyword", keyword);
+
+    return "user/search-results";
+}

@@ -1,0 +1,13 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.Payment;
+import com.cg.exception.ResourceNotFoundException;
+
+public interface IPaymentService {
+	Payment savePayment(Payment payment);
+    Payment getPaymentById(Long id);
+    List<Payment> getAllPayments();
+    void deletePayment(Long id);
+}

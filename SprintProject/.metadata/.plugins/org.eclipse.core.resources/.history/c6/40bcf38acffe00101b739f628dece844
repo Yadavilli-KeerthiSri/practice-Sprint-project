@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+ 
+<div th:fragment="body"
+     style="background:#ffffff; padding:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+ 
+    <h3 style="color:#ff5722; margin:0;">Food Delivery</h3>
+ 
+    <!-- ADMIN LINKS -->
+    <span sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/restaurants}" style="margin-right:15px;">Restaurants</a>
+        <a th:href="@{/admin/orders/list}" style="margin-right:15px;">Manage Orders</a>
+    </span>
+ 
+    <!-- USER LINKS -->
+    <span sec:authorize="hasRole('USER')">
+        <a th:href="@{/restaurants}" style="margin-right:15px;">Browse</a>
+        <a th:href="@{/orders/history}" style="margin-right:15px;">My Orders</a>
+    </span>
+ 
+    <!-- COMMON -->
+    <a th:href="@{/profile}" style="margin-right:15px;">Profile</a>
+ 
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit"
+                style="color:red; background:none; border:none; cursor:pointer;">
+            Logout
+        </button>
+    </form>
+ 
+</div>
+ 
+</body>
+</html>

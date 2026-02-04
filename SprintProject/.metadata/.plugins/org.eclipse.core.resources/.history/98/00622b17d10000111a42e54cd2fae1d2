@@ -1,0 +1,50 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.Restaurant;
+import com.cg.service.RestaurantService;
+
+@Controller
+@RequestMapping("/restaurants")
+public class RestaurantController {
+	 @Autowired
+	    private RestaurantService restaurantService;
+	 
+	    @GetMapping
+	    public String listRestaurants(Model model) {
+	        model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+	        return "restaurant/restaurant-list";
+	    }
+	 
+	    @GetMapping("/add")
+	    public String addRestaurantForm(Model model) {
+	        model.addAttribute("restaurant", new Restaurant());
+	        return "restaurant/restaurant-add";
+	    }
+	 
+	    @GetMapping("/edit/{id}")
+	    public String editRestaurant(@PathVariable Long id, Model model) {
+	        model.addAttribute("restaurant", restaurantService.getRestaurantById(id));
+	        return "restaurant/restaurant-edit";
+	    }
+	 
+	    @PostMapping("/save")
+	    public String saveRestaurant(@ModelAttribute Restaurant restaurant) {
+	        restaurantService.saveRestaurant(restaurant);
+	        return "redirect:/restaurants";
+	    }
+	 
+	    @GetMapping("/delete/{id}")
+	    public String deleteRestaurant(@PathVariable Long id) {
+	        restaurantService.deleteRestaurant(id);
+	        return "redirect:/restaurants";
+	    }
+}

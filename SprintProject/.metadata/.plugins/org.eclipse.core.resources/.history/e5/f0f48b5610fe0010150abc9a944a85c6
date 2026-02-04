@@ -1,0 +1,49 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.MenuItem;
+import com.cg.exception.ResourceNotFound;
+import com.cg.service.MenuItemService;
+import com.cg.service.RestaurantService;
+
+@Controller
+@RequestMapping("/menu-items")
+public class MenuItemController {
+	@Autowired
+    private MenuItemService menuItemService;
+ 
+    @Autowired
+    private RestaurantService restaurantService;
+ 
+    @GetMapping
+    public String getAllMenuItems(Model model) {
+        model.addAttribute("menuItems", menuItemService.getAllMenuItems());
+        model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+        return "/menuitems";
+    }
+ 
+    @PostMapping("/add")
+    public String addMenuItem(MenuItem item) {
+        menuItemService.createMenuItem(item);
+        return "redirect:/menu-items";
+    }
+ 
+    @PostMapping("/update/{id}")
+    public String updateMenuItem(@PathVariable Integer id, MenuItem item) throws ResourceNotFound {
+        menuItemService.updateMenuItem(id, item);
+        return "redirect:/menu-items";
+    }
+ 
+    @GetMapping("/delete/{id}")
+    public String deleteMenuItem(@PathVariable Integer id) throws ResourceNotFound {
+        menuItemService.deleteMenuItem(id);
+        return "redirect:/menu-items";
+    }
+}

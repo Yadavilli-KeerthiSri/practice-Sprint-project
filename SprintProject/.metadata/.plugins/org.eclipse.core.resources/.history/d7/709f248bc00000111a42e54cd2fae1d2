@@ -1,0 +1,5 @@
+package com.cg.controller.user;
+
+public class UserPaymentController {
+
+}

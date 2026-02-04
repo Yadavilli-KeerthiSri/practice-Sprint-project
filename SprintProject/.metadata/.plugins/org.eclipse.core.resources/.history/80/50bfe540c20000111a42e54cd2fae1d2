@@ -1,0 +1,5 @@
+package com.cg.controller.admin;
+
+public class AdminOrderController {
+
+}

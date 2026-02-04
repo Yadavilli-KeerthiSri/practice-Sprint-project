@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h3>Make Payment</h3>
+ 
+<form th:action="@{/payments/pay}" method="post">
+ 
+Order:
+<select name="order.orderId">
+<option th:each="o : ${orders}"
+        th:value="${o.orderId}"
+        th:text="${o.orderId}">
+</option>
+</select><br>
+ 
+Method:
+<select name="paymentMethod">
+<option>UPI</option>
+<option>Card</option>
+<option>Cash</option>
+</select><br>
+ 
+Amount: <input name="amount"><br><br>
+ 
+<button>Pay</button>
+</form>
+ 
+<hr>
+ 
+<table border="1">
+<tr>
+<th>ID</th><th>Amount</th><th>Status</th>
+</tr>
+ 
+<tr th:each="p : ${payments}">
+<td th:text="${p.paymentId}"></td>
+<td th:text="${p.amount}"></td>
+<td th:text="${p.transactionStatus}"></td>
+</tr>
+</table>
+ 
+</body>
+</html>

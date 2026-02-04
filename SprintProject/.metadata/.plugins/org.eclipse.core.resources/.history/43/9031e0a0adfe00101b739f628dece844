@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h3>Add Menu Item</h3>
+ 
+<form th:action="@{/menu-items/add}" method="post" enctype="multipart/form-data">
+ 
+    Item Name: <input name="itemName"><br>
+    Price: <input name="price"><br>
+    Category: <input name="category"><br>
+ 
+    Restaurant:
+    <select name="restaurant.restaurantId">
+        <option th:each="r : ${restaurants}"
+                th:value="${r.restaurantId}"
+                th:text="${r.restaurantName}">
+        </option>
+    </select><br>
+ 
+    Item Image: <input type="file" name="image"><br><br>
+ 
+    <button>Add Item</button>
+</form>
+ 
+<hr>
+ 
+<table border="1">
+<tr>
+<th>Item</th><th>Price</th><th>Category</th><th>Action</th>
+</tr>
+ 
+<tr th:each="m : ${menuItems}">
+<td th:text="${m.itemName}"></td>
+<td th:text="${m.price}"></td>
+<td th:text="${m.category}"></td>
+<td>
+<a th:href="@{/menu-items/delete/{id}(id=${m.itemId})}">Delete</a>
+</td>
+</tr>
+</table>
+ 
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customers</title>
+</head>
+<body>
+ 
+<h2>Add Customer</h2>
+ 
+<form th:action="@{/customers/add}" method="post">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" name="customerName" required></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="email" name="email" required></td>
+        </tr>
+        <tr>
+            <td>Contact:</td>
+            <td><input type="text" name="contact" required></td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td><input type="text" name="address" required></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit">Add Customer</button>
+            </td>
+        </tr>
+    </table>
+</form>
+ 
+<hr>
+ 
+<h2>Customer List</h2>
+ 
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Address</th>
+    </tr>
+ 
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.customerId}"></td>
+        <td th:text="${c.customerName}"></td>
+        <td th:text="${c.email}"></td>
+        <td th:text="${c.contact}"></td>
+        <td th:text="${c.address}"></td>
+    </tr>
+</table>
+ 
+</body>
+</html>

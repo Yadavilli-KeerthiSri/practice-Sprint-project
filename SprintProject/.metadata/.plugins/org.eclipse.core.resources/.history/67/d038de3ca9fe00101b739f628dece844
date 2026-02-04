@@ -1,0 +1,20 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.MenuItem;
+import com.cg.exception.ResourceNotFound;
+
+public interface IMenuItemService {
+	MenuItem createMenuItem(MenuItem item);
+	 
+    MenuItem updateMenuItem(Integer id, MenuItem item) throws ResourceNotFound;
+ 
+    MenuItem getMenuItemById(Integer id) throws ResourceNotFound;
+ 
+    List<MenuItem> getAllMenuItems();
+ 
+    List<MenuItem> getMenuItemsByRestaurant(Integer restaurantId) throws ResourceNotFound;
+ 
+    void deleteMenuItem(Integer id) throws ResourceNotFound;
+}

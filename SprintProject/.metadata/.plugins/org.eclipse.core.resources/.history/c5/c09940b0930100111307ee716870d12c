@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results for: <span th:text="${keyword}"></span></h1>
+
+    <h2>Restaurants</h2>
+    <div th:if="${restaurants != null}">
+        <div th:each="r : ${restaurants}">
+            <p>
+                Name: <span th:text="${r.restaurantName}"></span> | 
+                Location: <span th:text="${r.location}"></span> |
+                Rating: <span th:text="${r.ratings}"></span>
+            </p>
+        </div>
+    </div>
+
+    <h2>Menu Items</h2>
+    <div th:if="${menuItems != null}">
+        <div th:each="item : ${menuItems}">
+            <p>
+                Item: <span th:text="${item.itemName}"></span> | 
+                Price: <span th:text="${item.price}"></span>
+            </p>
+            <form th:action="@{/cart/add}" method="post">
+                <input type="hidden" name="itemId" th:value="${item.itemId}" />
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

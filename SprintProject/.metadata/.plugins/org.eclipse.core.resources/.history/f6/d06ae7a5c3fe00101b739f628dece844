@@ -1,0 +1,93 @@
+package com.cg.controller;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.Order;
+import com.cg.entity.OrderStatus;
+import com.cg.service.MenuItemService;
+import com.cg.service.OrderService;
+import com.cg.service.RestaurantService;
+
+@Controller
+@RequestMapping("/orders")
+public class OrderController {
+	@Autowired
+    private OrderService orderService;
+	
+	@Autowired
+    private MenuItemService menuItemService;
+ 
+    @Autowired
+    private RestaurantService restaurantService;
+ 
+    @GetMapping
+    public String listOrders(Model model) {
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "order/order-list";
+    }
+ 
+    @GetMapping("/add")
+    public String addOrderForm(Model model) {
+        model.addAttribute("order", new Order());
+        model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+        
+        if (restaurantId != null) {
+            model.addAttribute(
+                "menuItems",
+                menuItemService.getMenuItemsByRestaurant(restaurantId)
+            );
+            model.addAttribute("selectedRestaurantId", restaurantId);
+        }
+        
+        return "order/order-add";
+    }
+ 
+    @GetMapping("/edit/{id}")
+    public String editOrder(@PathVariable Long id, Model model) {
+        model.addAttribute("order", orderService.getOrderById(id));
+        model.addAttribute("statuses", OrderStatus.values());
+        return "order/order-edit";
+    }
+ 
+    @PostMapping("/save")
+    public String saveOrder(@ModelAttribute Order order) {
+        if (order.getOrderId() == null) {
+            order.setOrderDate(LocalDateTime.now());
+            order.setStatus(OrderStatus.PLACED);
+        }
+        orderService.saveOrder(order);
+        return "redirect:/orders";
+    }
+ 
+    @GetMapping("/delete/{id}")
+    public String deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return "redirect:/orders";
+    }
+	   
+	@GetMapping("/history")
+	public String orderHistory(Model model, Principal principal) {
+	 
+	    List<Order> orders = orderService.getOrdersByUsername(principal.getName());
+	 
+	    model.addAttribute("orders", orders);
+	    return "order/order-history";
+	}
+	
+    @GetMapping("/track/{id}")
+    public String trackOrder(@PathVariable Long id, Model model) {
+	    model.addAttribute("order", orderService.getOrderById(id));
+	    return "order/order-tracking";
+	}
+}

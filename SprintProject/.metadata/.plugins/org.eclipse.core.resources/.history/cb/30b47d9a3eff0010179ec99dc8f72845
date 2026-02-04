@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+ 
+<div style="
+    background:#ffffff;
+    padding:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+">
+ 
+    <h3 style="color:#ff5722;">Food Delivery</h3>
+ 
+    <div>
+        <!-- ADMIN -->
+        <span sec:authorize="hasRole('ADMIN')">
+            <a href="/restaurants" style="margin-right:15px;">Restaurants</a>
+            <a href="/menu" style="margin-right:15px;">Menu</a>
+            <a href="/agents" style="margin-right:15px;">Delivery Agents</a>
+        </span>
+ 
+        <!-- USER -->
+        <span sec:authorize="hasRole('USER')">
+            <a href="/orders" style="margin-right:15px;">My Orders</a>
+            <a href="/payments" style="margin-right:15px;">Payments</a>
+        </span>
+ 
+        <a href="/logout" style="color:red;">Logout</a>
+        <a href="/profile" style="margin-right:15px;">Profile</a>
+        <a href="/orders/history">Orders</a>
+ 
+    </div>
+</div>
+ 
+</body>
+</html>

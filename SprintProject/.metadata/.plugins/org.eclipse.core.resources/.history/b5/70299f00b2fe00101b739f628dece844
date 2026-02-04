@@ -1,0 +1,51 @@
+package com.cg.controller;
+
+import com.cg.entity.Customer;
+import com.cg.exception.ResourceNotFoundException;
+import com.cg.service.CustomerService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/customers")
+public class CustomerController {
+	 @Autowired
+	    private CustomerService customerService;
+	 
+	    // LIST
+	    @GetMapping
+	    public String listCustomers(Model model) {
+	        model.addAttribute("customers", customerService.getAllCustomers());
+	        return "customer/customer-list";
+	    }
+	 
+	    // ADD FORM
+	    @GetMapping("/add")
+	    public String addCustomerForm(Model model) {
+	        model.addAttribute("customer", new Customer());
+	        return "customer/customer-add";
+	    }
+	 
+	    // EDIT FORM
+	    @GetMapping("/edit/{id}")
+	    public String editCustomer(@PathVariable Long id, Model model) {
+	        model.addAttribute("customer", customerService.getCustomerById(id));
+	        return "customer/customer-edit";
+	    }
+	 
+	    // SAVE (ADD + EDIT)
+	    @PostMapping("/save")
+	    public String saveCustomer(@ModelAttribute Customer customer) {
+	        customerService.saveCustomer(customer);
+	        return "redirect:/customers";
+	    }
+	 
+	    // DELETE
+	    @GetMapping("/delete/{id}")
+	    public String deleteCustomer(@PathVariable Long id) {
+	        customerService.deleteCustomer(id);
+	        return "redirect:/customers";
+	    }
+}

@@ -1,0 +1,15 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.Payment;
+
+public interface IPaymentService {
+	Payment makePayment(Payment payment);
+	 
+    Payment getPaymentById(Integer id);
+ 
+    List<Payment> getAllPayments();
+ 
+    Payment getPaymentByOrder(Integer orderId);
+}

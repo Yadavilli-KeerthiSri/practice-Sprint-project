@@ -1,0 +1,22 @@
+package com.cg.iservice;
+
+import com.cg.entity.Customer;
+
+import java.util.List;
+
+import org.springframework.security.core.userdetails.UserDetails;
+
+public interface ICustomerService {
+	Customer register(Customer customer);
+
+    Customer getById(Long id);
+
+    Customer getByEmail(String email);
+
+    List<Customer> getAll();
+
+    void delete(Long id);
+
+	UserDetails loadUserByUsername(String email);
+}
+

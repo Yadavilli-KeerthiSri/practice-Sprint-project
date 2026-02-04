@@ -1,0 +1,18 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.Restaurant;
+import com.cg.exception.ResourceNotFoundException;
+
+public interface IRestaurantService {
+	 Restaurant createRestaurant(Restaurant restaurant);
+	 
+	 Restaurant updateRestaurant(Integer id, Restaurant restaurant) throws ResourceNotFoundException;
+	 
+     Restaurant getRestaurantById(Integer id) throws ResourceNotFoundException;
+	 
+	 List<Restaurant> getAllRestaurants();
+	 
+	 void deleteRestaurant(Integer id) throws ResourceNotFoundException;
+}

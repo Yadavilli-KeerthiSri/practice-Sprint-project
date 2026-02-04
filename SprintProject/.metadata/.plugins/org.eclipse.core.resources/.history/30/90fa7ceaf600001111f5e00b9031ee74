@@ -1,0 +1,57 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.cg.entity.Customer;
+import com.cg.repository.CustomerRepository;
+import com.cg.service.CustomerService;
+
+@Controller
+public class AuthController {
+
+    @Autowired
+    private CustomerService customerService;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+    
+    @PostMapping("/doLogin")
+    public String login1(@RequestParam("email")String email,@RequestParam("password")String password) {
+    	boolean userExists = customerRepository.existsByEmailAndPassword(email, password);
+        
+        if (userExists) {
+            return "user/dashboard";
+        } else {
+            // Optional: Add error message for the login page
+            return "auth/login"; 
+        }
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "auth/register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(Customer customer) {
+    	
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setRole("ROLE_USER");
+        customerService.saveUser(customer);
+        return "redirect:/login";
+        
+    }
+}

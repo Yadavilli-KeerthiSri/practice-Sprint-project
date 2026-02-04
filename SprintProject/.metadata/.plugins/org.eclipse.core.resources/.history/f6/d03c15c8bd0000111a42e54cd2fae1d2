@@ -1,0 +1,15 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.Order;
+import com.cg.enumeration.OrderStatus;
+
+public interface IOrderService {
+	Order saveOrder(Order order);
+    Order getOrderById(Long id);
+    List<Order> getAllOrders();
+    void deleteOrder(Long id);
+    void updateOrderStatus(Long orderId, OrderStatus status);
+    List<Order> getOrdersByUsername(String username);
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+</head>
+<body>
+    <!-- Absolute path syntax to prevent 500 error -->
+    <div th:replace="fragments/navbar :: body"></div>
+
+    <div class="container mt-5">
+        <h2>Welcome to your Dashboard</h2>
+        
+        <div class="row mt-4">
+            <!-- Admin Section -->
+            <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+                <div class="card p-3 shadow-sm bg-light">
+                    <h4>Admin Panel</h4>
+                    <a th:href="@{/admin/orders/list}" class="btn btn-primary mt-2">Manage All Orders</a>
+                </div>
+            </div>
+
+            <!-- User Section -->
+            <div class="col-md-4" sec:authorize="hasRole('USER')">
+                <div class="card p-3 shadow-sm bg-light">
+                    <h4>My Account</h4>
+                    <a th:href="@{/orders/history}" class="btn btn-success mt-2">View My Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edit Agent</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card { width:420px; margin:40px auto; background:white;
+padding:25px; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.1);}
+h2 { color:#ff5722; text-align:center; }
+input, button { width:100%; padding:10px; margin-top:12px; }
+button { background:#ff5722; color:white; border:none; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Edit Delivery Agent</h2>
+ 
+<form th:action="@{/agents/save}" th:object="${agent}" method="post">
+<input type="hidden" th:field="*{agentId}">
+<input th:field="*{name}" placeholder="Name">
+<input th:field="*{phone}" placeholder="Phone">
+<input th:field="*{vehicle}" placeholder="Vehicle">
+<button>Update Agent</button>
+</form>
+</div>
+ 
+</body>
+</html>

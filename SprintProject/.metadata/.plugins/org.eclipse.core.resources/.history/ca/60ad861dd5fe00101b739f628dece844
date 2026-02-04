@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div th:fragment="body" style="background:#ffffff; padding:15px 30px; box-shadow:0 4px 10px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;">
+ 
+    <!-- Logo/Brand -->
+    <a th:href="@{/}" style="text-decoration:none;">
+        <h3 style="color:#ff5722; margin:0; font-weight:bold;">Food Delivery</h3>
+    </a>
+ 
+    <div style="display: flex; align-items: center; gap: 20px;">
+        
+        <!-- ADMIN SPECIFIC LINKS -->
+        <div sec:authorize="hasRole('ADMIN')" style="display: flex; gap: 15px;">
+            <a th:href="@{/restaurants}" style="text-decoration:none; color:#333; font-weight:500;">Restaurants</a>
+            <a th:href="@{/admin/orders/list}" style="text-decoration:none; color:#333; font-weight:500;">Manage Orders</a>
+            <a th:href="@{/agents}" style="text-decoration:none; color:#333; font-weight:500;">Delivery Agents</a>
+        </div>
+ 
+        <!-- USER SPECIFIC LINKS -->
+        <div sec:authorize="hasRole('USER')" style="display: flex; gap: 15px;">
+            <a th:href="@{/restaurants}" style="text-decoration:none; color:#333; font-weight:500;">Browse Food</a>
+            <a th:href="@{/orders/history}" style="text-decoration:none; color:#333; font-weight:500;">My Orders</a>
+            <a th:href="@{/payments}" style="text-decoration:none; color:#333; font-weight:500;">Payments</a>
+        </div>
+ 
+        <!-- SHARED LINKS (Profile & Logout) -->
+        <div style="display: flex; align-items: center; gap: 15px; border-left: 1px solid #ddd; padding-left: 15px;">
+            <a th:href="@{/profile}" style="text-decoration:none; color:#333; font-weight:500;">Profile</a>
+            
+            <!-- Standard Logout via POST (Prevents CSRF Issues) -->
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" style="color:#d32f2f; background:none; border:none; cursor:pointer; font-weight:bold; font-size:1rem; padding:0;">
+                    Logout
+                </button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+ 
+</body>
+</html>

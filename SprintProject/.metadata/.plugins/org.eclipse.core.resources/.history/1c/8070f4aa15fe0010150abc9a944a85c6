@@ -1,0 +1,89 @@
+package com.cg.dto;
+
+import java.time.LocalDateTime;
+
+import com.cg.entity.OrderStatus;
+
+public class OrderDTO {
+	private Long orderId;
+    private LocalDateTime orderDate;
+    private Double totalAmount;
+    private Long customerId;
+    private Long restaurantId;
+    private Long paymentId;
+    private Long agentId;
+    private OrderStatus orderStatus;
+    
+	public OrderDTO() {
+		super();
+	}
+
+	public OrderDTO(Long orderId, LocalDateTime orderDate, Double totalAmount, Long customerId, Long restaurantId,
+			Long paymentId, Long agentId, OrderStatus orderStatus) {
+		super();
+		this.orderId = orderId;
+		this.orderDate = orderDate;
+		this.totalAmount = totalAmount;
+		this.customerId = customerId;
+		this.restaurantId = restaurantId;
+		this.paymentId = paymentId;
+		this.agentId = agentId;
+		this.orderStatus = orderStatus;
+	}
+
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	public LocalDateTime getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(LocalDateTime orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	public Long getRestaurantId() {
+		return restaurantId;
+	}
+	public void setRestaurantId(Long restaurantId) {
+		this.restaurantId = restaurantId;
+	}
+
+	public Long getPaymentId() {
+		return paymentId;
+	}
+	public void setPaymentId(Long paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public Long getAgentId() {
+		return agentId;
+	}
+	public void setAgentId(Long agentId) {
+		this.agentId = agentId;
+	}
+
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Order - Order Management System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; padding-top: 40px; }
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-card">
+        <h2 class="mb-4 text-center text-primary" th:text="${order.orderId == null ? 'Create New Order' : 'Update Order'}">Order Form</h2>
+        <hr>
+
+        <form th:action="@{/orders/save}" th:object="${order}" method="post" class="row g-3">
+            
+            <!-- Hidden field for ID during updates -->
+            <input type="hidden" th:field="*{orderId}" />
+
+            <!-- Order Date -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Order Date & Time</label>
+                <input type="datetime-local" th:field="*{orderDate}" class="form-control" required />
+            </div>
+
+            <!-- Total Amount -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Total Amount (₹)</label>
+                <input type="number" step="0.01" th:field="*{totalAmount}" class="form-control" placeholder="0.00" required />
+            </div>
+
+            <!-- Order Status (Enum) -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Order Status</label>
+                <select th:field="*{orderStatus}" class="form-select" required>
+                    <option value="" disabled selected>Select Status</option></option>
+                </select>
+            </div>
+
+            <!-- Customer Selection (ManyToOne) -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Customer</label>
+                <select th:field="*{customer}" class="form-select" required>
+                    <option value="">-- Select Customer --</option>
+                    <option th:each="cust : ${customers}" 
+                            th:value="${cust.customerId}" 
+                            th:text="${cust.customerName}">Customer Name</option>
+                </select>
+            </div>
+
+            <!-- Restaurant Selection (ManyToOne) -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Restaurant</label>
+                <select th:field="*{restaurant}" class="form-select" required>
+                    <option value="">-- Select Restaurant --</option>
+                    <option th:each="resto : ${restaurants}" 
+                            th:value="${resto.restaurantId}" 
+                            th:text="${resto.restaurantName}">Restaurant Name</option>
+                </select>
+            </div>
+
+            <!-- Delivery Agent (Optional ManyToOne) -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Delivery Agent (Optional)</label>
+                <select th:field="*{agent}" class="form-select">
+                    <option value="">-- Unassigned --</option>
+                    <option th:each="ag : ${agents}" 
+                            th:value="${ag.agentId}" 
+                            th:text="${ag.agentName}">Agent Name</option>
+                </select>
+            </div>
+
+            <!-- Payment Linkage (Simplified for Form) -->
+            <div class="col-12" th:if="*{payment != null}">
+                <div class="alert alert-info py-2">
+                    Linked Payment ID: <strong th:text="*{payment.paymentId}">#PAY001</strong>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="col-12 mt-4 d-flex justify-content-between">
+                <a th:href="@{/orders}" class="btn btn-secondary px-4">Cancel</a>
+                <button type="submit" class="btn btn-success px-5 shadow">Save Order</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net"></script>
+</body>
+</html>

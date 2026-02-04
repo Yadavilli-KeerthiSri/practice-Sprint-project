@@ -1,0 +1,21 @@
+package com.cg.iservice;
+
+import com.cg.entity.Customer;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public interface ICustomerService {
+	Customer createCustomer(Customer customer);
+	 
+    Customer updateCustomer(Integer id, Customer customer);
+ 
+    Customer getCustomerById(Integer id);
+ 
+    List<Customer> getAllCustomers();
+ 
+    void deleteCustomer(Integer id);
+}
+

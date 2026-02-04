@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Order Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .dashboard-card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+        /* Map your OrderStatus Enum to Bootstrap colors */
+        .status-PENDING { background-color: #ffc107; color: #000; }
+        .status-PLACED { background-color: #0dcaf0; color: #fff; }
+        .status-PREPARING { background-color: #6610f2; color: #fff; }
+        .status-PICKED_UP { background-color: #0d6efd; color: #fff; }
+        .status-OUT_FOR_DELIVERY { background-color: #fd7e14; color: #fff; }
+        .status-DELIVERED { background-color: #198754; color: #fff; }
+        .status-CANCELLED { background-color: #dc3545; color: #fff; }
+    </style>
+</head>
+<body>
+    <!-- Navbar Fragment -->
+    <div th:replace="fragments/navbar :: body"></div>
+
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Active Orders</h2>
+            <span class="badge bg-dark" th:text="${orders.size()} + ' Total Orders'"></span>
+        </div>
+
+        <div class="card dashboard-card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th style="min-width: 250px;">Update Tracking</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iterate over order list from controller -->
+                            <tr th:each="order : ${orders}">
+                                <td class="ps-4 fw-bold" th:text="'#' + ${order.orderId}"></td>
+                                <td>
+                                    <div th:text="${order.customerName}"></div>
+                                    <small class="text-muted" th:text="${order.customerEmail}"></small>
+                                </td>
+                                <td>
+                                    <!-- Dynamic Badge using CSS Classes mapped to Enum name -->
+                                    <span th:class="'status-badge status-' + ${order.status.name()}" 
+                                          th:text="${order.status}">PENDING</span>
+                                </td>
+                                <td>
+                                    <!-- Order Status Update Form -->
+                                    <form th:action="@{/admin/orders/update-status}" method="post" class="row g-2 align-items-center">
+                                        <input type="hidden" name="orderId" th:value="${order.orderId}">
+                                        <div class="col-auto">
+                                            <select name="status" class="form-select form-select-sm">
+                                                <!-- Pull values directly from OrderStatus Enum class -->
+                                                
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                                   
+                            <!-- Empty State -->
+                            <tr th:if="${#lists.isEmpty(orders)}">
+                                <td colspan="5" class="text-center py-5 text-muted">No orders found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net"></script>
+</body>
+</html>

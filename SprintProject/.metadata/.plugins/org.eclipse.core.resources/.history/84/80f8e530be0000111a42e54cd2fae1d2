@@ -1,0 +1,38 @@
+package com.cg.service;
+
+import com.cg.entity.Payment;
+import com.cg.iservice.IPaymentService;
+import com.cg.repository.PaymentRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class PaymentService implements IPaymentService {
+
+	@Autowired
+    private PaymentRepository paymentRepository;
+ 
+    @Override
+    public Payment savePayment(Payment payment) {
+        return paymentRepository.save(payment);
+    }
+ 
+    @Override
+    public Payment getPaymentById(Long id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
+    }
+ 
+    @Override
+    public List<Payment> getAllPayments() {
+        return paymentRepository.findAll();
+    }
+ 
+    @Override
+    public void deletePayment(Long id) {
+        paymentRepository.deleteById(id);
+    }
+}

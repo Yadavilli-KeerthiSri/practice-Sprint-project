@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Dashboard</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="fragments/user-navbar :: userNavbar"></div>
+
+<nav>
+    <a th:href="@{/user/dashboard}">Home</a> |
+    <a th:href="@{/user/orders}">My Orders</a> |
+    <a th:href="@{/user/profile}">Profile</a> |
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<hr>
+
+<h2>Restaurants Near You</h2>
+
+<div th:each="r : ${restaurants}">
+    <h3 th:text="${r.restaurantName}"></h3>
+    <p>
+        <span th:text="${r.cuisine}"></span> |
+        <span th:text="${r.location}"></span>
+    </p>
+    <a th:href="@{/user/restaurants/{id}(id=${r.restaurantId})}">
+        View Menu
+    </a>
+    <hr>
+</div>
+
+</body>
+</html>

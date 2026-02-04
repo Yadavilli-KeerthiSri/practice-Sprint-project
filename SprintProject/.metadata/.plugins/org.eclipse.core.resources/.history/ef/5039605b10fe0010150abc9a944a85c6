@@ -1,0 +1,32 @@
+package com.cg.controller;
+
+import com.cg.entity.Payment;
+import com.cg.service.OrderService;
+import com.cg.service.PaymentService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/payments")
+public class PaymentController {
+	    @Autowired
+	    private PaymentService paymentService;
+	 
+	    @Autowired
+	    private OrderService orderService;
+	 
+	    @GetMapping
+	    public String getAllPayments(Model model) {
+	        model.addAttribute("payments", paymentService.getAllPayments());
+	        model.addAttribute("orders", orderService.getAllOrders());
+	        return "/payments";
+	    }
+	 
+	    @PostMapping("/pay")
+	    public String makePayment(Payment payment) {
+	        paymentService.makePayment(payment);
+	        return "redirect:/payments";
+	    }
+}

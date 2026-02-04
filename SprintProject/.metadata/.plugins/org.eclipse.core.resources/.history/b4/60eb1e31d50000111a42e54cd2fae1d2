@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Failed</title>
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+</head>
+<body>
+<div th:replace="fragments/user-navbar :: userNavbar"></div>
+
+<div class="card">
+    <h2>❌ Payment Failed</h2>
+
+    <p class="failure">
+        Something went wrong. Please try again.
+    </p>
+
+    <a th:href="@{/user/cart/view}">
+        <button>Retry Payment</button>
+    </a>
+</div>
+
+</body>
+</html>

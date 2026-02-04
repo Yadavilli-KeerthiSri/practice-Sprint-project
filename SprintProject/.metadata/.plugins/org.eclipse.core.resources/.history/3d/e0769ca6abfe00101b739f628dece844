@@ -1,0 +1,16 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.Payment;
+import com.cg.exception.ResourceNotFoundException;
+
+public interface IPaymentService {
+	Payment makePayment(Payment payment);
+	 
+    Payment getPaymentById(Integer id) throws ResourceNotFoundException;
+ 
+    List<Payment> getAllPayments();
+ 
+    Payment getPaymentByOrder(Integer orderId) throws ResourceNotFoundException;
+}

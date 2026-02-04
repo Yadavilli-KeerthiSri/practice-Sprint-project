@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Orders</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="user/fragments/user-navbar :: userNavbar"></div>
+
+<h2>My Orders</h2>
+
+<table border="1">
+    <tr>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.orderId}"></td>
+        <td th:text="${o.orderStatus}"></td>
+        <td>₹<span th:text="${o.totalAmount}"></span></td>
+        <td>
+            <a th:href="@{/user/orders/{id}(id=${o.orderId})}">
+                View
+            </a>
+            <span th:if="${o.orderStatus.name() == 'PLACED'}">
+                |
+                <a th:href="@{/user/orders/cancel/{id}(id=${o.orderId})}">
+                    Cancel
+                </a>
+            </span>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

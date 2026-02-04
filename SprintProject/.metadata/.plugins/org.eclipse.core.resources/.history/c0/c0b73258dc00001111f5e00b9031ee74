@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="admin/fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Admin Dashboard</h2>
+
+<nav>
+    <a th:href="@{/admin/restaurants}">Restaurants</a> |
+    <a th:href="@{/admin/menu-items}">Menu Items</a> |
+    <a th:href="@{/admin/agents}">Delivery Agents</a> |
+    <a th:href="@{/admin/orders}">Orders</a> |
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<hr>
+
+<p>Welcome Admin 👨‍💼</p>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu Item</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Menu Item</h2>
+
+<form th:action="@{/admin/menu-items/save}" th:object="${item}" method="post">
+
+    <input type="hidden" th:field="*{itemId}"/>
+
+    Name: <input type="text" th:field="*{itemName}" required><br><br>
+    Category: <input type="text" th:field="*{category}" required><br><br>
+    Price: <input type="number" th:field="*{price}" required><br><br>
+
+    Restaurant:
+    <select th:field="*{restaurant.restaurantId}">
+        <option th:each="r : ${restaurants}"
+                th:value="${r.restaurantId}"
+                th:text="${r.restaurantName}">
+        </option>
+    </select>
+
+    <br><br>
+    <button type="submit">Save</button>
+</form>
+
+<a th:href="@{/admin/menu-items}">⬅ Back</a>
+
+</body>
+</html>

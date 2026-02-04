@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order History</title>
+    <style>
+        body {
+            background: #f4f6f8;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        h2 {
+            color: #ff5722;
+        }
+        .timeline {
+            position: relative;
+            margin-top: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            width: 4px;
+            height: 100%;
+            background: #ff5722;
+        }
+        .event {
+            margin-left: 60px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .status {
+            font-weight: bold;
+            color: green;
+        }
+        .amount {
+            color: #ff5722;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="container">
+    <h2>My Orders</h2>
+ 
+    <div class="timeline">
+    <!-- The loop starts here -->
+    <div class="event" th:each="order : ${orders}">
+        <p><strong>Order ID:</strong> <span th:text="${order.orderId}"></span></p>
+        <p><strong>Date:</strong> <span th:text="${order.orderDate}"></span></p>
+        <p><strong>Restaurant:</strong> <span th:text="${order.restaurant.restaurantName}"></span></p>
+        <p class="amount">₹ <span th:text="${order.totalAmount}"></span></p>
+        <p class="status" th:text="${order.status}"></p>
+
+        <!-- MOVE THE LINK HERE -->
+        <a th:href="@{/orders/track/{id}(id=${order.orderId})}">
+            Track Order
+        </a>
+    </div>
+</div>
+
+</div>
+ 
+</body>
+</html>

@@ -1,0 +1,40 @@
+package com.cg.service;
+
+import com.cg.dto.CustomerDTO;
+import com.cg.dto.Mapper;
+import com.cg.entity.Customer;
+import com.cg.exception.ResourceNotFound;
+import com.cg.iservice.ICustomerService;
+import com.cg.repository.CustomerRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+//@Transactional
+public class CustomerService implements ICustomerService {
+	 @Autowired private CustomerRepository repo;
+	    
+	    @Override 
+	    public List<Customer> getAllCustomers() { 
+	    	return repo.findAll(); 
+	    }
+	    
+	    @Override 
+	    public void saveCustomer(Customer customer) {
+	    	repo.save(customer); 
+	    }
+	    
+	    @Override
+	    public Customer getCustomerById(Long id) { 
+	        return repo.findById(id).orElseThrow(() -> new RuntimeException("Not Found")); 
+	    }
+	    
+	    @Override 
+	    public void deleteCustomer(Long id) {
+	    	repo.deleteById(id); 
+	    }
+}

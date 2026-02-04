@@ -1,0 +1,34 @@
+package com.cg.controller.user;
+
+import com.cg.repository.MenuItemRepository;
+import com.cg.repository.RestaurantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class UserSearchController {
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+
+    @GetMapping("/user/search")
+    public String search(@RequestParam String keyword, Model model) {
+        // Add the keyword back to the model so the HTML can display it
+        model.addAttribute("keyword", keyword);
+
+        model.addAttribute("restaurants", 
+                restaurantRepository.findByRestaurantNameContainingIgnoreCase(keyword));
+
+        model.addAttribute("items", 
+                menuItemRepository.findByItemNameContainingIgnoreCase(keyword));
+
+        return "user/search-results";
+    }
+}
+

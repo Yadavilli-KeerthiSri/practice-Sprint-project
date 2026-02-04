@@ -1,0 +1,63 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.Order;
+import com.cg.entity.OrderStatus;
+import com.cg.exception.ResourceNotFound;
+import com.cg.service.CustomerService;
+import com.cg.service.DeliveryAgentService;
+import com.cg.service.OrderService;
+import com.cg.service.RestaurantService;
+
+@Controller
+@RequestMapping("/orders")
+public class OrderController {
+	 @Autowired
+	    private OrderService orderService;
+	 
+	    @Autowired
+	    private CustomerService customerService;
+	 
+	    @Autowired
+	    private RestaurantService restaurantService;
+	 
+	    @Autowired
+	    private DeliveryAgentService agentService;
+	 
+	    @GetMapping
+	    public String getAllOrders(Model model) {
+	        model.addAttribute("orders", orderService.getAllOrders());
+	        model.addAttribute("customers", customerService.getAllCustomers());
+	        model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+	        model.addAttribute("agents", agentService.getAllAgents());
+	        return "/orders";
+	    }
+	 
+	    // PLACE ORDER
+	    @PostMapping("/place")
+	    public String placeOrder(Order order) {
+	        orderService.placeOrder(order);
+	        return "redirect:/orders";
+	    }
+	 
+	    // UPDATE ORDER STATUS
+	    @PostMapping("/status/{id}")
+	    public String updateStatus(@PathVariable Integer id, OrderStatus status) throws ResourceNotFound {
+	        orderService.updateOrderStatus(id, status);
+	        return "redirect:/orders";
+	    }
+	 
+	    // CANCEL ORDER
+	    @GetMapping("/cancel/{id}")
+	    public String cancelOrder(@PathVariable Integer id) throws ResourceNotFound {
+	        orderService.cancelOrder(id);
+	        return "redirect:/orders";
+	    }
+}

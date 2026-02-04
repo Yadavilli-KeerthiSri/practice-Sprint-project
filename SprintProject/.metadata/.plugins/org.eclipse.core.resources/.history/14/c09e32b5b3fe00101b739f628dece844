@@ -1,0 +1,55 @@
+package com.cg.controller;
+
+import com.cg.entity.Payment;
+import com.cg.service.OrderService;
+import com.cg.service.PaymentService;
+
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/payments")
+public class PaymentController {
+	 @Autowired
+	    private PaymentService paymentService;
+	 
+	    @Autowired
+	    private OrderService orderService;
+	 
+	    @GetMapping
+	    public String listPayments(Model model) {
+	        model.addAttribute("payments", paymentService.getAllPayments());
+	        return "payment/payment-list";
+	    }
+	 
+	    @GetMapping("/add/{orderId}")
+	    public String addPaymentForm(@PathVariable Long orderId, Model model) {
+	        Payment payment = new Payment();
+	        payment.setOrder(orderService.getOrderById(orderId));
+	        model.addAttribute("payment", payment);
+	        model.addAttribute("methods", PaymentMethod.values());
+	        return "payment/payment-add";
+	    }
+	 
+	    @GetMapping("/edit/{id}")
+	    public String editPayment(@PathVariable Long id, Model model) {
+	        model.addAttribute("payment", paymentService.getPaymentById(id));
+	        model.addAttribute("methods", PaymentMethod.values());
+	        model.addAttribute("statuses", PaymentMethod.values());
+	        return "payment/payment-edit";
+	    }
+	 
+	    @PostMapping("/save")
+	    public String savePayment(@ModelAttribute Payment payment) {
+	        if (payment.getPaymentDate() == null) {
+	            payment.setPaymentDate(LocalDateTime.now());
+	            payment.setStatus(PaymentMethod.SUCCESS);
+	        }
+	        paymentService.savePayment(payment);
+	        return "redirect:/payments";
+	    }
+}

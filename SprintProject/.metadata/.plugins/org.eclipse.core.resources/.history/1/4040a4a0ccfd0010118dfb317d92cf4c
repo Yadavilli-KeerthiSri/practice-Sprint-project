@@ -1,0 +1,14 @@
+package com.cg.iservice;
+
+import com.cg.dto.CustomerDTO;
+
+import java.util.List;
+
+public interface ICustomerService {
+    CustomerDTO create(CustomerDTO dto) throws Exception;
+    CustomerDTO getById(Long id);
+    List<CustomerDTO> getAll();
+    CustomerDTO update(Long id, CustomerDTO dto);
+    void delete(Long id);
+}
+

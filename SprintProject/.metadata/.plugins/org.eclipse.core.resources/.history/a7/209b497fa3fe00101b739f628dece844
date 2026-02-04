@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>My Profile</title>
+ 
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+ 
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+ 
+        h2 {
+            color: #ff5722;
+        }
+ 
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+ 
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #ff9800, #ff5722);
+            color: white;
+            font-size: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+ 
+        .info {
+            margin-top: 25px;
+        }
+ 
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+ 
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+ 
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+ 
+        button:hover {
+            background: #e64a19;
+        }
+ 
+        .role-card {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+ 
+        .admin {
+            background: #fff3e0;
+        }
+ 
+        .user {
+            background: #e3f2fd;
+        }
+ 
+        .actions a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #ff5722;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+ 
+<!-- NAVBAR -->
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="container">
+ 
+    <div class="profile-header">
+        <div class="avatar"
+             th:text="${user.username.substring(0,1).toUpperCase()}"></div>
+        <div>
+            <h2 th:text="${user.username}"></h2>
+            <p th:text="${user.role}"></p>
+        </div>
+    </div>
+ 
+    <!-- EDIT PROFILE -->
+    <form th:action="@{/profile/update}" method="post" th:object="${user}">
+        <input type="hidden" th:field="*{id}">
+ 
+        <div class="info">
+            <label>Username</label>
+            <input type="text" th:field="*{username}" required>
+        </div>
+ 
+        <button type="submit">Update Profile</button>
+    </form>
+ 
+    <!-- ADMIN SECTION -->
+    <div class="role-card admin" sec:authorize="hasRole('ADMIN')">
+        <h3>Admin Controls</h3>
+        <div class="actions">
+            <a href="/restaurants">Manage Restaurants</a>
+            <a href="/menu">Manage Menu</a>
+            <a href="/agents">Delivery Agents</a>
+            <a href="/orders">All Orders</a>
+        </div>
+    </div>
+ 
+    <!-- USER SECTION -->
+    <div class="role-card user" sec:authorize="hasRole('USER')">
+        <h3>User Actions</h3>
+        <div class="actions">
+            <a href="/restaurants">Browse Restaurants</a>
+            <a href="/orders">My Orders</a>
+            <a href="/payments">My Payments</a>
+        </div>
+    </div>
+    
+    <a href="/password/change">Change Password</a>
+<a href="/orders/history">Order History</a>
+ 
+</div>
+ 
+</body>
+</html>

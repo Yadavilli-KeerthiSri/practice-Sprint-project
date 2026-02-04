@@ -1,0 +1,46 @@
+package com.cg.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.Orders;
+import com.cg.iservice.IOrderService;
+import com.cg.repository.OrderRepository;
+
+import jakarta.persistence.criteria.Order;
+
+@Service
+public class OrderService implements IOrderService{
+	    @Autowired
+	    private OrderRepository orderRepo;
+
+	    @Override
+	    public Orders createOrder(Orders order) { 
+	    	return orderRepo.save(order);
+	    }
+
+	    @Override
+	    public List<Orders> getAllOrders() {
+	    	return orderRepo.findAll();
+	    }
+
+	    @Override
+	    public Orders getOrderById(Long id) { 
+	        return orderRepo.findById(id).orElseThrow(() -> new RuntimeException("Order not found")); 
+	    }
+
+	    @Override
+	    public Orders updateOrder(Long id, Orders details) {
+	        Orders existing = getOrderById(id);
+	        existing.setOrderStatus(details.getOrderStatus());
+	        existing.setTotalAmount(details.getTotalAmount());
+	        return orderRepo.save(existing);
+	    }
+
+	    @Override
+	    public void deleteOrder(Long id) {
+	    	orderRepo.deleteById(id);
+	   }
+}

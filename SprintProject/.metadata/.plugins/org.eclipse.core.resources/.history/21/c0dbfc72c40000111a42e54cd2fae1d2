@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment</title>
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+</head>
+<body>
+
+<div class="card">
+    <h2>Payment</h2>
+
+    <div class="amount">
+        Pay ₹ <span th:text="${order.totalAmount}"></span>
+    </div>
+
+    <form th:action="@{/user/payment/pay}" method="post">
+
+        <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+
+        <label class="method">
+            <input type="radio" name="paymentMethod" value="COD" required>
+            Cash on Delivery
+        </label>
+
+        <label class="method">
+            <input type="radio" name="paymentMethod" value="UPI">
+            UPI
+        </label>
+
+        <label class="method">
+            <input type="radio" name="paymentMethod" value="CARD">
+            Card
+        </label>
+
+        <label class="method">
+            <input type="radio" name="paymentMethod" value="NET_BANKING">
+            Net Banking
+        </label>
+
+        <button type="submit">Pay Now</button>
+    </form>
+</div>
+
+</body>
+</html>

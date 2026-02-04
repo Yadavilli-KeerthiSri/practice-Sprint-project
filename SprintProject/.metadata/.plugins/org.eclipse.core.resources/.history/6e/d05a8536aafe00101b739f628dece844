@@ -1,0 +1,14 @@
+package com.cg.iservice;
+
+import com.cg.entity.Customer;
+import com.cg.exception.ResourceNotFoundException;
+
+import java.util.List;
+
+public interface ICustomerService {
+	 Customer saveCustomer(Customer customer);
+	 Customer getCustomerById(Long id);
+	 List<Customer> getAllCustomers();
+	 void deleteCustomer(Long id);
+}
+

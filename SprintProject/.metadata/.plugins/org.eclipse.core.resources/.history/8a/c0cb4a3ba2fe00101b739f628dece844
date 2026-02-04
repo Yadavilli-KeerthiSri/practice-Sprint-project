@@ -1,0 +1,21 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.Order;
+import com.cg.entity.OrderStatus;
+import com.cg.exception.ResourceNotFound;
+
+public interface IOrderService {
+	 Order placeOrder(Order order);
+	 
+	 Order updateOrderStatus(Integer orderId, OrderStatus status) throws ResourceNotFound;
+	 
+	 Order getOrderById(Integer orderId) throws ResourceNotFound;
+	 
+	 List<Order> getAllOrders();
+	 
+	 List<Order> getOrdersByCustomer(Integer customerId) throws ResourceNotFound;
+	 
+	 void cancelOrder(Integer orderId) throws ResourceNotFound;
+}

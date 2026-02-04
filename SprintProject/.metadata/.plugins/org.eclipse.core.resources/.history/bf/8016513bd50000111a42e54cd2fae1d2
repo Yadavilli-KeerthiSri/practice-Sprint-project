@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Profile</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="fragments/user-navbar :: userNavbar"></div>
+
+<h2>Edit Profile</h2>
+
+<form th:action="@{/user/profile/update}" th:object="${user}" method="post">
+
+    <input type="hidden" th:field="*{customerId}"/>
+
+    Name: <input type="text" th:field="*{customerName}"><br><br>
+    Contact: <input type="text" th:field="*{contact}"><br><br>
+    Address: <input type="text" th:field="*{address}"><br><br>
+
+    <button type="submit">Update</button>
+</form>
+
+<a th:href="@{/user/profile}">⬅ Back</a>
+
+</body>
+</html>

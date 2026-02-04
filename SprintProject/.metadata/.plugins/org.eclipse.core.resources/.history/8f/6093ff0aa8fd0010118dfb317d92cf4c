@@ -1,0 +1,9 @@
+package com.cg.iservice;
+
+public interface IOrderService {
+	Orders createOrder(Orders order);
+    List<Orders> getAllOrders();
+    Orders getOrderById(Long id);
+    Orders updateOrder(Long id, Orders orderDetails);
+    void deleteOrder(Long id);
+}

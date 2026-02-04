@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            background: #f4f6f8;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 30px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .admin {
+            background: #fff3e0;
+        }
+        .user {
+            background: #e3f2fd;
+        }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #ff5722;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="container">
+    <h2>Welcome to Dashboard</h2>
+ 
+    <div class="cards">
+ 
+        <!-- ADMIN CARDS -->
+        <div class="card admin" sec:authorize="hasRole('ADMIN')">
+            <h3>Manage Restaurants</h3>
+            <a href="/restaurants">Open</a>
+        </div>
+ 
+        <div class="card admin" sec:authorize="hasRole('ADMIN')">
+            <h3>Manage Menu</h3>
+            <a href="/menu">Open</a>
+        </div>
+ 
+        <div class="card admin" sec:authorize="hasRole('ADMIN')">
+            <h3>Delivery Agents</h3>
+            <a href="/agents">Open</a>
+        </div>
+ 
+        <!-- USER CARDS -->
+        <div class="card user" sec:authorize="hasRole('USER')">
+            <h3>Browse Restaurants</h3>
+            <a href="/restaurants">View</a>
+        </div>
+ 
+        <div class="card user" sec:authorize="hasRole('USER')">
+            <h3>My Orders</h3>
+            <a href="/orders">View</a>
+        </div>
+ 
+        <div class="card user" sec:authorize="hasRole('USER')">
+            <h3>Payments</h3>
+            <a href="/payments">View</a>
+        </div>
+ 
+    </div>
+</div>
+ 
+</body>
+</html>

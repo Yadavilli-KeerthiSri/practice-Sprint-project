@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Orders</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  background:white;
+  margin:30px;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; }
+.status {
+  padding:6px 10px;
+  border-radius:20px;
+  color:white;
+}
+.PLACED { background:#ff9800; }
+.PREPARING { background:#03a9f4; }
+.ON_THE_WAY { background:#673ab7; }
+.DELIVERED { background:#4caf50; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Orders</h2>
+ 
+<table width="100%">
+<tr>
+<th>ID</th>
+<th>Customer</th>
+<th>Restaurant</th>
+<th>Total</th>
+<th>Status</th>
+<th>Track</th>
+</tr>
+ 
+<tr th:each="o : ${orders}">
+<td th:text="${o.orderId}"></td>
+<td th:text="${o.customer.name}"></td>
+<td th:text="${o.restaurant.name}"></td>
+<td>₹ <span th:text="${o.totalAmount}"></span></td>
+<td>
+<span class="status" th:text="${o.status}" th:classappend="${o.status}"></span>
+</td>
+<td>
+<a th:href="@{/orders/track/{id}(id=${o.orderId})}">Track</a>
+</td>
+</tr>
+</table>
+ 
+</div>
+</body>
+</html>

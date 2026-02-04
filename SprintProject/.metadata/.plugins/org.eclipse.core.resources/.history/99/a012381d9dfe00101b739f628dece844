@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h3>Manage Orders</h3>
+<a href="/admin/dashboard">Back</a>
+ 
+<table border="1">
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Status</th>
+<th>Update</th>
+</tr>
+ 
+<tr th:each="o : ${orders}">
+<td th:text="${o.orderId}"></td>
+<td th:text="${o.customer.customerName}"></td>
+<td th:text="${o.status}"></td>
+ 
+<td>
+<form th:action="@{/admin/orders/status/{id}(id=${o.orderId})}" method="post">
+<select name="status">
+<option>PLACED</option>
+<option>PREPARING</option>
+<option>OUT_FOR_DELIVERY</option>
+<option>DELIVERED</option>
+<option>CANCELLED</option>
+</select>
+<button>Update</button>
+</form>
+</td>
+</tr>
+</table>
+ 
+</body>
+</html>

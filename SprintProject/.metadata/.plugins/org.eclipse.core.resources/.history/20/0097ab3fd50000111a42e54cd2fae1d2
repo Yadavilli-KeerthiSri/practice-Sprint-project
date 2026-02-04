@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="fragments/user-navbar :: userNavbar"></div>
+
+<a th:href="@{/user/cart/view}">🛒 Cart</a>
+
+<h2 th:text="${restaurant.restaurantName}"></h2>
+
+<table border="1">
+    <tr>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Add</th>
+    </tr>
+
+    <tr th:each="i : ${menuItems}">
+        <td th:text="${i.itemName}"></td>
+        <td th:text="${i.category}"></td>
+        <td>₹<span th:text="${i.price}"></span></td>
+        <td>
+            <a th:href="@{/user/cart/add/{id}(id=${i.itemId})}">
+                Add
+            </a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

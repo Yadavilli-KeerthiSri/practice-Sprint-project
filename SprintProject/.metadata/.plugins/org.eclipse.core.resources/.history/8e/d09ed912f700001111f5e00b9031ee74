@@ -1,0 +1,81 @@
+package com.cg.controller;
+
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.cg.entity.Customer;
+import com.cg.repository.CustomerRepository;
+import com.cg.service.CustomerService;
+
+@Controller
+public class AuthController {
+
+    @Autowired
+    private CustomerService customerService;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+    
+    @GetMapping("/redirect")
+    public String redirectAfterLogin(Authentication authentication,Model model) {
+        // Get the list of roles for the logged-in user
+        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        String username = authentication.getName();
+ 
+        if (roles.contains("ROLE_ADMIN")) {
+        	return "admin/admin-dashboard"; 
+        } else if (roles.contains("ROLE_USER")) {
+        	Customer customer = customerService.getByEmail(username); 
+            model.addAttribute("customer", customer ); 
+            return "user/user-dashboard";
+            // maps to doctor-index.html
+        } else if (roles.contains("ROLE_PATIENT")) {
+            return "hospital/patient-index"; // maps to patient-index.html
+        }
+        return "login";
+    }
+    
+    @PostMapping("/doLogin")
+    public String login1(@RequestParam("email")String email,@RequestParam("password")String password) {
+    	boolean userExists = customerRepository.existsByEmailAndPassword(email, password);
+        
+        if (userExists) {
+            return "user/dashboard";
+        } else {
+            // Optional: Add error message for the login page
+            return "auth/login"; 
+        }
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "auth/register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(Customer customer) {
+    	
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setRole("ROLE_USER");
+        customerService.saveUser(customer);
+        return "redirect:/login";
+        
+    }
+}

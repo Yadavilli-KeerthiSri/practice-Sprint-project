@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Make Payment</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  width:420px; margin:40px auto; background:white;
+  padding:25px; border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; text-align:center; }
+input, select, button {
+  width:100%; padding:10px; margin-top:12px;
+  border-radius:6px; border:1px solid #ccc;
+}
+button { background:#ff5722; color:white; border:none; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Payment</h2>
+ 
+<form action="/payments/save" method="post">
+<input type="hidden" name="order.orderId" th:value="${payment.order.orderId}">
+ 
+<select name="method" required>
+<option th:each="m : ${methods}" th:value="${m}" th:text="${m}"></option>
+</select>
+ 
+<input name="amount" placeholder="Amount" required>
+ 
+<button>Pay Now</button>
+</form>
+</div>
+ 
+</body>
+</html>

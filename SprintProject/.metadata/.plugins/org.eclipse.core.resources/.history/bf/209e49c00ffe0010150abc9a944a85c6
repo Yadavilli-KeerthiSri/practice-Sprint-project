@@ -1,0 +1,41 @@
+package com.cg.controller;
+
+import com.cg.dto.PaymentDTO;
+import com.cg.entity.Payment;
+import com.cg.iservice.ICustomerService;
+import com.cg.iservice.IPaymentService;
+import com.cg.service.OrderService;
+import com.cg.service.PaymentService;
+
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@RequestMapping("/payments")
+public class PaymentController {
+	    @Autowired
+	    private PaymentService paymentService;
+	 
+	    @Autowired
+	    private OrderService orderService;
+	 
+	    @GetMapping
+	    public String getAllPayments(Model model) {
+	        model.addAttribute("payments", paymentService.getAllPayments());
+	        model.addAttribute("orders", orderService.getAllOrders());
+	        return "payments";
+	    }
+	 
+	    @PostMapping("/pay")
+	    public String makePayment(Payment payment) {
+	        paymentService.makePayment(payment);
+	        return "redirect:/payments";
+	    }
+}

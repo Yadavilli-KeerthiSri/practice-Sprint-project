@@ -1,0 +1,54 @@
+package com.cg.controller.user;
+
+import com.cg.entity.MenuItem;
+import com.cg.service.MenuItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller
+@RequestMapping("/user/cart")
+@SessionAttributes("cart")
+public class UserCartController {
+
+    @Autowired
+    private MenuItemService menuItemService;
+
+    @ModelAttribute("cart")
+    public List<MenuItem> cart() {
+        return new ArrayList<>();
+    }
+
+    /* ADD */
+    @GetMapping("/add/{id}")
+    public String add(@PathVariable Long id,
+                      @ModelAttribute("cart") List<MenuItem> cart) {
+
+        cart.add(menuItemService.getById(id));
+        return "redirect:/user/cart/view";
+    }
+
+    /* DELETE */
+    @GetMapping("/remove/{id}")
+    public String remove(@PathVariable Long id,
+                         @ModelAttribute("cart") List<MenuItem> cart) {
+
+        cart.removeIf(i -> i.getItemId().equals(id));
+        return "redirect:/user/cart/view";
+    }
+
+    /* LIST */
+    @GetMapping("/view")
+    public String viewCart(@ModelAttribute("cart") List<MenuItem> cart,
+                           Model model) {
+
+        double total = cart.stream().mapToDouble(MenuItem::getPrice).sum();
+        model.addAttribute("items", cart);
+        model.addAttribute("total", total);
+        return "user/cart";
+    }
+}

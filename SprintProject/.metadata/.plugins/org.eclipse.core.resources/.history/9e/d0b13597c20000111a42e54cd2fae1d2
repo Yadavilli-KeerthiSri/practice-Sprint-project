@@ -1,0 +1,55 @@
+package com.cg.controller.user;
+
+import com.cg.entity.Customer;
+import com.cg.entity.MenuItem;
+import com.cg.entity.Order;
+import com.cg.service.CustomerService;
+import com.cg.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/user/orders")
+public class UserOrderController {
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @PostMapping("/place")
+    public String placeOrder(@SessionAttribute("cart") List<MenuItem> cart,
+                             Authentication auth) {
+
+        Customer customer = customerService.getByEmail(auth.getName());
+
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setItems(cart);
+        order.setTotalAmount(
+                cart.stream().mapToDouble(MenuItem::getPrice).sum()
+        );
+
+        orderService.place(order);
+        cart.clear();
+
+        return "redirect:/user/orders";
+    }
+
+    @GetMapping
+    public String myOrders(Authentication auth, Model model) {
+
+        Customer customer = customerService.getByEmail(auth.getName());
+        model.addAttribute("orders",
+                orderService.getByCustomer(customer.getCustomerId()));
+
+        return "user-orders";
+    }
+}
+

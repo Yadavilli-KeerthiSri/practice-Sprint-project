@@ -1,0 +1,60 @@
+package com.cg.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.MenuItem;
+import com.cg.entity.Restaurant;
+import com.cg.exception.ResourceNotFoundException;
+import com.cg.iservice.IMenuItemService;
+import com.cg.repository.MenuItemRepository;
+import com.cg.repository.RestaurantRepository;
+
+@Service
+public class MenuItemService implements IMenuItemService{
+	@Autowired
+    private MenuItemRepository menuItemRepository;
+ 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+ 
+    @Override
+    public MenuItem createMenuItem(MenuItem item) {
+        return menuItemRepository.save(item);
+    }
+ 
+    @Override
+    public MenuItem updateMenuItem(Integer id, MenuItem item) throws ResourceNotFoundException {
+        MenuItem existing = getMenuItemById(id);
+        existing.setItemName(item.getItemName());
+        existing.setPrice(item.getPrice());
+        existing.setCategory(item.getCategory());
+        existing.setRestaurant(item.getRestaurant());
+        return menuItemRepository.save(existing);
+    }
+ 
+    @Override
+    public MenuItem getMenuItemById(Integer id) throws ResourceNotFoundException {
+        return menuItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
+    }
+ 
+    @Override
+    public List<MenuItem> getAllMenuItems() {
+        return menuItemRepository.findAll();
+    }
+ 
+    @Override
+    public List<MenuItem> getMenuItemsByRestaurant(Integer restaurantId) throws ResourceNotFoundException {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
+        return restaurant.getMenuItems();
+    }
+ 
+    @Override
+    public void deleteMenuItem(Integer id) throws ResourceNotFoundException {
+        menuItemRepository.delete(getMenuItemById(id));
+    }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edit Payment</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card { width:420px; margin:40px auto; background:white;
+padding:25px; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.1);}
+h2 { color:#ff5722; text-align:center; }
+select, input, button { width:100%; padding:10px; margin-top:12px; }
+button { background:#ff5722; color:white; border:none; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Edit Payment</h2>
+ 
+<form th:action="@{/payments/save}" th:object="${payment}" method="post">
+<input type="hidden" th:field="*{paymentId}">
+ 
+<select th:field="*{method}">
+<option th:each="m : ${methods}" th:value="${m}" th:text="${m}"></option>
+</select>
+ 
+<select th:field="*{status}">
+<option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+</select>
+ 
+<input th:field="*{amount}" placeholder="Amount">
+<button>Update Payment</button>
+</form>
+</div>
+ 
+</body>
+</html>

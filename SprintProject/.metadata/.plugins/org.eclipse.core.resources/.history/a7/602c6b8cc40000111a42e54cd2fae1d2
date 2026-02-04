@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Place Order</title>
+ 
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  width:460px; margin:40px auto; background:white;
+  padding:25px; border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; text-align:center; }
+select, input, button {
+  width:100%; padding:10px; margin-top:12px;
+  border-radius:6px; border:1px solid #ccc;
+}
+button {
+  background:#ff5722; color:white;
+  border:none; font-size:16px;
+}
+label { font-weight:bold; margin-top:10px; display:block; }
+.total {
+  font-size:18px;
+  font-weight:bold;
+  color:#4caf50;
+}
+</style>
+ 
+<script>
+function updatePrice() {
+    const menu = document.getElementById("menuItem");
+    const quantity = document.getElementById("quantity").value || 1;
+    const price = menu.options[menu.selectedIndex]?.dataset.price || 0;
+ 
+    const total = price * quantity;
+    document.getElementById("totalAmount").value = total.toFixed(2);
+}
+</script>
+ 
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Place Order</h2>
+ 
+<!-- RESTAURANT CASCADE -->
+<form method="get" action="/orders/add">
+<select name="restaurantId" onchange="this.form.submit()" required>
+    <option value="">Select Restaurant</option>
+    <option th:each="r : ${restaurants}"
+            th:value="${r.restaurantId}"
+            th:text="${r.name}"
+            th:selected="${r.restaurantId == selectedRestaurantId}">
+    </option>
+</select>
+</form>
+ 
+<!-- ORDER FORM -->
+<form action="/orders/save" method="post">
+ 
+<input type="hidden" name="restaurant.restaurantId"
+       th:value="${selectedRestaurantId}">
+ 
+<!-- MENU ITEM -->
+<label>Menu Item</label>
+<select id="menuItem"
+        name="items[0].itemId"
+        onchange="updatePrice()"
+        required>
+    <option value="">Select Menu Item</option>
+    <option th:each="m : ${menuItems}"
+            th:value="${m.itemId}"
+            th:text="${m.name + ' - ₹' + m.price}"
+            th:attr="data-price=${m.price}">
+    </option>
+</select>
+ 
+<!-- QUANTITY -->
+<label>Quantity</label>
+<input id="quantity"
+       type="number"
+       name="quantity"
+       value="1"
+       min="1"
+       onchange="updatePrice()"
+       required>
+ 
+<!-- TOTAL -->
+<label>Total Amount</label>
+<input id="totalAmount"
+       name="totalAmount"
+       class="total"
+       readonly
+       placeholder="Auto calculated">
+ 
+<button>Place Order</button>
+ 
+</form>
+</div>
+ 
+</body>
+</html>

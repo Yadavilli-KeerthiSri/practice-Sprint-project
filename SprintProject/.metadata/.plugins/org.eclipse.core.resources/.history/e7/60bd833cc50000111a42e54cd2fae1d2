@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+
+<!-- ADMIN NAVBAR -->
+<div th:replace="fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Welcome, Admin 👨‍💼</h2>
+
+<!-- TOP NAV -->
+<div>
+    <a th:href="@{/admin/dashboard}">Dashboard</a> |
+    <a th:href="@{/admin/restaurants}">Restaurants</a> |
+    <a th:href="@{/admin/menu-items}">Menu Items</a> |
+    <a th:href="@{/admin/agents}">Delivery Agents</a> |
+    <a th:href="@{/admin/orders}">Orders</a> |
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+<hr>
+
+<h2>Restaurants</h2>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="r : ${restaurants}">
+        <td th:text="${r.restaurantName}"></td>
+        <td th:text="${r.location}"></td>
+        <td>
+            <a th:href="@{/admin/restaurant/edit/{id}(id=${r.restaurantId})}">Edit</a>
+            <a th:href="@{/admin/restaurant/delete/{id}(id=${r.restaurantId})}">Delete</a>
+        </td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Delivery Agents</h2>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Vehicle</th>
+        <th>Status</th>
+    </tr>
+    <tr th:each="a : ${agents}">
+        <td th:text="${a.agentName}"></td>
+        <td th:text="${a.vehicleDetails}"></td>
+        <td th:text="${a.availability ? 'Available' : 'Busy'}"></td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Orders</h2>
+<table border="1">
+    <tr>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Total</th>
+    </tr>
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.orderId}"></td>
+        <td th:text="${o.orderStatus}"></td>
+        <td th:text="${o.totalAmount}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

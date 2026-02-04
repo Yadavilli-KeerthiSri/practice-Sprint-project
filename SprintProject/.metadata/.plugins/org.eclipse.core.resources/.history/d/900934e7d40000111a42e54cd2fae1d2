@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Agent</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Delivery Agent</h2>
+
+<form th:action="@{/admin/agents/save}" th:object="${agent}" method="post">
+
+    <input type="hidden" th:field="*{agentId}"/>
+
+    Name: <input type="text" th:field="*{agentName}" required><br><br>
+    Contact: <input type="text" th:field="*{contact}" required><br><br>
+    Vehicle: <input type="text" th:field="*{vehicleDetails}" required><br><br>
+
+    Available:
+    <input type="checkbox" th:field="*{availability}"><br><br>
+
+    <button type="submit">Save</button>
+</form>
+
+<a th:href="@{/admin/agents}">⬅ Back</a>
+
+</body>
+</html>

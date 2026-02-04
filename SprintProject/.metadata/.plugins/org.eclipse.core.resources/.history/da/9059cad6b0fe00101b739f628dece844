@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h3>Place Order</h3>
+ 
+<form th:action="@{/orders/place}" method="post">
+ 
+Customer:
+<select name="customer.customerId">
+<option th:each="c : ${customers}"
+        th:value="${c.customerId}"
+        th:text="${c.customerName}">
+</option>
+</select><br>
+ 
+Restaurant:
+<select name="restaurant.restaurantId">
+<option th:each="r : ${restaurants}"
+        th:value="${r.restaurantId}"
+        th:text="${r.restaurantName}">
+</option>
+</select><br>
+ 
+Delivery Agent:
+<select name="agent.agentId">
+<option th:each="a : ${agents}"
+        th:value="${a.agentId}"
+        th:text="${a.agentName}">
+</option>
+</select><br>
+ 
+Total Amount: <input name="totalAmount"><br><br>
+ 
+<button>Place Order</button>
+</form>
+ 
+<hr>
+ 
+<table border="1">
+<tr>
+<th>ID</th><th>Status</th><th>Action</th>
+</tr>
+ 
+<tr th:each="o : ${orders}">
+<td th:text="${o.orderId}"></td>
+<td th:text="${o.status}"></td>
+<td>
+<a th:href="@{/orders/cancel/{id}(id=${o.orderId})}">Cancel</a>
+</td>
+</tr>
+</table>
+ 
+</body>
+</html>

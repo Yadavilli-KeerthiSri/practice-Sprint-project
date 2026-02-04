@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction History</title>
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .table-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="table-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-dark">Payment Transactions</h2>
+            <a th:href="@{/payments/new}" class="btn btn-success">Process New Payment</a>
+        </div>
+        
+        <table class="table table-hover border">
+            <thead class="table-light">
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Method</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Linked Order</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pay : ${payments}">
+                    <td th:text="${pay.paymentId}" class="text-muted"></td>
+                    <td th:text="${pay.paymentName}" class="fw-bold"></td>
+                    <td th:text="${'₹' + pay.amount}"></td>
+                    <td>
+                        <span class="badge" 
+                              th:classappend="${pay.transactionStatus.name() == 'SUCCESS' ? 'bg-success' : (pay.transactionStatus.name() == 'FAILED' ? 'bg-danger' : 'bg-warning text-dark')}"
+                              th:text="${pay.transactionStatus}">STATUS</span>
+                    </td>
+                    <td>
+                        <span th:if="${pay.order != null}" th:text="'Order #' + ${pay.order.orderId}"></span>
+                        <span th:unless="${pay.order != null}" class="text-muted small italic"></span>
+                    </td>
+                    <td class="text-center">
+                        <a th:href="@{/payments/edit/{id}(id=${pay.paymentId})}" class="btn btn-sm btn-outline-primary">Update</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(payments)}">
+                    <td colspan="6" class="text-center py-4">No transactions recorded.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

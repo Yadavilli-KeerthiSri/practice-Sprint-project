@@ -1,0 +1,13 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.User;
+
+public interface IUserService {
+	User createUser(User user);
+    User getUserById(Long id);
+    User getUserByUsername(String username);
+    List<User> getAllUsers();
+    void deleteUser(Long id);
+}

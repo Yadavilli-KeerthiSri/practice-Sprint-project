@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Dashboard</title>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div>
+    <a th:href="@{/user/dashboard}">Home</a> |
+    <a th:href="@{/user/orders}">My Orders</a> |
+    <a th:href="@{/user/profile}">My Profile</a> |
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+<hr>
+
+<!-- SEARCH -->
+<form th:action="@{/user/search}" method="get">
+    <input type="text" name="keyword" placeholder="Search restaurant or menu item">
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+<!-- RESTAURANTS -->
+<h2>Restaurants</h2>
+<div th:each="r : ${restaurants}">
+    <h3 th:text="${r.restaurantName}"></h3>
+    <p th:text="${r.location}"></p>
+    <a th:href="@{/user/restaurant/{id}(id=${r.restaurantId})}">
+        View Menu
+    </a>
+    <hr>
+</div>
+
+<!-- TOP MENU ITEMS -->
+<h2>Top Menu Items</h2>
+<div th:each="m : ${menuItems}">
+    <p>
+        <b th:text="${m.itemName}"></b>
+        - ₹<span th:text="${m.price}"></span>
+        <a th:href="@{/cart/add/{id}(id=${m.itemId})}">Add</a>
+    </p>
+</div>
+
+</body>
+</html>

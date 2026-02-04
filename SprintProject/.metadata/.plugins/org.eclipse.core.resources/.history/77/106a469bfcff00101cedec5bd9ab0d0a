@@ -1,0 +1,89 @@
+package com.cg.config;
+
+import com.cg.entity.*;
+import com.cg.repository.*; // Import all repositories
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
+@Configuration
+public class DataInitializer {
+
+    // Inject all required repositories
+    @Bean
+    public CommandLineRunner initDatabase(
+            UserRepository userRepository,
+            CustomerRepository customerRepository,
+            RestaurantRepository restaurantRepository,
+            OrderRepository orderRepository,
+            PasswordEncoder passwordEncoder) {
+        return args -> {
+            // --- 1. Create Users and Customers ---
+            User adminUser = createOrGetAdminUser(userRepository, passwordEncoder);
+            Customer adminCustomer = createOrGetCustomer(customerRepository, adminUser, "Admin Name", "admin@example.com");
+
+            User regularUser = createOrGetRegularUser(userRepository, passwordEncoder);
+            Customer regularCustomer = createOrGetCustomer(customerRepository, regularUser, "Regular User", "user@example.com");
+
+            // --- 2. Create Sample Restaurant ---
+            Restaurant sampleRestaurant = createOrGetRestaurant(restaurantRepository);
+            
+            // NOTE: You need a MenuItem entity and repository for the next step.
+            // Assuming you have MenuItemRepository injected, you would add menu items here.
+
+            // --- 3. Create a Sample Order linked to the regular user ---
+            if (orderRepository.count() == 0) {
+                System.out.println("Creating sample order...");
+                Order order = new Order();
+                order.setOrderDate(LocalDateTime.now());
+                order.setStatus(OrderStatus.DELIVERED);
+                order.setTotalAmount(45.50);
+                order.setCustomer(regularCustomer); // Link the order to the regular user's customer profile
+                order.setRestaurant(sampleRestaurant);
+                // order.setMenuItems(...); // Link menu items if you have that setup
+
+                orderRepository.save(order);
+                System.out.println("Sample order created for regular user.");
+            }
+        };
+    }
+
+    // --- Helper methods to keep the main logic clean ---
+
+    private User createOrGetAdminUser(UserRepository repo, PasswordEncoder pe) {
+        return repo.findByUsername("admin").orElseGet(() -> {
+            User u = new User(); u.setUsername("admin"); u.setPassword(pe.encode("password123")); u.setRole("ROLE_ADMIN"); return repo.save(u);
+        });
+    }
+
+    private User createOrGetRegularUser(UserRepository repo, PasswordEncoder pe) {
+         return repo.findByUsername("user").orElseGet(() -> {
+            User u = new User(); u.setUsername("user"); u.setPassword(pe.encode("password123")); u.setRole("ROLE_USER"); return repo.save(u);
+        });
+    }
+
+    private Customer createOrGetCustomer(CustomerRepository repo, User user, String name, String email) {
+        // We look up by email/name to avoid duplicates when restarting the app multiple times
+        List<Customer> existing = repo.findAll();
+        for (Customer c : existing) {
+            if (c.getEmail() != null && c.getEmail().equals(email)) return c;
+        }
+
+        Customer c = new Customer();
+        c.setName(name); c.setEmail(email); c.setPhone("555-1234"); c.setAddress("123 Main St");
+        c.setUser(user); // Link the customer to the user
+        return repo.save(c);
+    }
+
+    private Restaurant createOrGetRestaurant(RestaurantRepository repo) {
+        if (repo.count() > 0) return repo.findAll().get(0);
+        Restaurant r = new Restaurant();
+        r.setName("Sample Diner"); r.setCuisine("American"); r.setLocation("Hyderabad"); r.setRating(4.5);
+        return repo.save(r);
+    }
+}

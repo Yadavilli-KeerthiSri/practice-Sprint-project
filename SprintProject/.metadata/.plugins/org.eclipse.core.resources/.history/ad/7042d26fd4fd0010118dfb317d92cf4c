@@ -1,0 +1,91 @@
+package com.cg.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.cg.dto.OrderDTO;
+import com.cg.entity.Customer;
+import com.cg.entity.Order;
+import com.cg.entity.OrderStatus;
+import com.cg.exception.ResourceNotFound;
+import com.cg.iservice.IOrderService;
+import com.cg.repository.CustomerRepository;
+import com.cg.repository.OrderRepository;
+
+@Service
+public class OrderService implements IOrderService{
+	    @Autowired
+	    private OrderRepository orderRepo;
+	    
+	    @Autowired
+	    private CustomerRepository customerRepo;
+	    
+	     @Override
+	     @Transactional(readOnly = true)
+	     // Now returns Order directly, handles exception internally
+	     public Optional<Order> getById(Long orderId) {
+	         return orderRepo.findById(orderId);
+	     }
+
+	     @Override
+	     @Transactional(readOnly = true)
+	     public List<Order> getAll() {
+	         return orderRepo.findAll();
+	     }
+	     
+	     @Override
+		    @Transactional
+		    public Order create(Order order) {
+		        // 1. Fetch related entities to establish the relationship
+		        Customer customer = customerRepo.findById(order.getCustomer().getCustomerId())
+		            .orElseThrow(() -> new ResourceNotFound("Customer not found"));
+		            
+		        // 2. Set the actual entity objects on the order
+		        order.setCustomer(customer);
+		        
+		        // 3. Ensure bidirectional sync if necessary
+		        customer.getOrders().add(order); 
+
+		        return orderRepo.save(order);
+		    }
+	     
+	     @Override
+	     public void saveOrder(Order order, Long customerId) {
+	         Customer customer = customerRepo.findById(customerId)
+	                 .orElseThrow(() -> new RuntimeException("Customer Not Found"));
+	         // Using your helper method for bidirectional consistency
+	         customer.addOrder(order); 
+	         orderRepo.save(order);
+	     }
+
+	     @Override
+	     public Order update(Long orderId, Order updated) {
+	            // Throws our custom exception, caught by GlobalExceptionHandler
+	            Order existing = (Order) orderRepo.findById(orderId)
+	                            .orElseThrow(() -> new ResourceNotFound("Order not found: " + orderId));
+
+	            // Update only mutable fields
+	            if (updated.getOrderDate() != null) existing.setOrderDate(updated.getOrderDate());
+	            if (updated.getTotalAmount() != null) existing.setTotalAmount(updated.getTotalAmount());
+	            if (updated.getCustomerId() != null) existing.setCustomerId(updated.getCustomerId());
+	            if (updated.getRestaurantId() != null) existing.setRestaurantId(updated.getRestaurantId());
+	            if (updated.getPaymentId() != null) existing.setPaymentId(updated.getPaymentId());
+	            if (updated.getAgentId() != null) existing.setAgentId(updated.getAgentId());
+	            if (updated.getOrderStatus() != null) existing.setOrderStatus(updated.getOrderStatus());
+
+	            return orderRepo.save(existing);
+	     }
+
+	     @Override
+	     public void delete(Long orderId) throws ResourceNotFound {
+	            // Use existsById for cleaner check, throw custom exception if not found
+	            if (!orderRepo.existsById(orderId)) {
+	                throw new ResourceNotFound("Order not found for deletion: " + orderId);
+	            }
+	            orderRepo.deleteById(orderId);
+	     }
+}

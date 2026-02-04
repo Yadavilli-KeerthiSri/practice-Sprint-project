@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h3>Add Customer</h3>
+ 
+<form th:action="@{/customers/add}" method="post" enctype="multipart/form-data">
+    Name: <input name="customerName"><br>
+    Contact: <input name="contact"><br>
+    Email: <input name="email"><br>
+    Address: <input name="address"><br>
+    Profile Image: <input type="file" name="image"><br><br>
+    <button>Add Customer</button>
+</form>
+ 
+<hr>
+ 
+<h3>Customer List</h3>
+ 
+<table border="1">
+<tr>
+<th>Name</th><th>Email</th><th>Action</th>
+</tr>
+ 
+<tr th:each="c : ${customers}">
+<td th:text="${c.customerName}"></td>
+<td th:text="${c.email}"></td>
+<td>
+    <a th:href="@{/customers/delete/{id}(id=${c.customerId})}">Delete</a>
+</td>
+</tr>
+</table>
+ 
+</body>
+</html>

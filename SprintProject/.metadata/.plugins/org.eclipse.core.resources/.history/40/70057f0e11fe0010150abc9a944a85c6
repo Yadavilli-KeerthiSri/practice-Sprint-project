@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .table-container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
+        .badge-status { font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid px-4">
+    <div class="table-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary border-bottom border-primary border-3 pb-2">Order Dashboard</h2>
+            <a th:href="@{/orders/new}" class="btn btn-primary shadow-sm">Create New Order</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Restaurant</th>
+                        <th>Payment ID</th>
+                        <th>Agent ID</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.orderId}" class="fw-bold"></td>
+                        <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yy HH:mm')}"></td>
+                        <td th:text="${order.customer != null ? order.customer.customerName : 'N/A'}"></td>
+                        <td th:text="${order.restaurant != null ? order.restaurant.restaurantName : 'N/A'}"></td>
+                        
+                        <!-- Added Payment ID from OneToOne relationship -->
+                        <td>
+                            <span th:if="${order.payment != null}" th:text="${order.payment.paymentId}" class="text-muted small"></span>
+                            <span th:unless="${order.payment != null}" class="badge bg-secondary"></span>
+                        </td>
+
+                        <!-- Added Agent ID from ManyToOne relationship -->
+                        <td>
+                            <span th:if="${order.agent != null}" th:text="${order.agent.agentId}"></span>
+                            <span th:unless="${order.agent != null}" class="text-danger small italic"></span>
+                        </td>
+
+                        <td>
+                            <span class="badge badge-status" 
+                                  th:classappend="${order.orderStatus.toString() == 'PLACED' ? 'bg-info' : 'bg-success'}" 
+                                  th:text="${order.orderStatus}">STATUS</span>
+                        </td>
+                        
+                        <td th:text="${#numbers.formatCurrency(order.totalAmount)}">₹0.00</td>
+                        
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a th:href="@{/orders/update/{id}(id=${order.orderId})}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                <a th:href="@{/orders/delete/{id}(id=${order.orderId})}" 
+                                   class="btn btn-sm btn-outline-danger" 
+                                   onclick="return confirm('Delete this order?')";>Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(orders)}">
+                        <td colspan="9" class="text-center py-5 text-muted">No orders found in the database.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.DeliveryAgent;
+import com.cg.service.DeliveryAgentService;
+
+@Controller
+@RequestMapping("/agents")
+public class DeliveryAgentController {
+	@Autowired
+    private DeliveryAgentService agentService;
+ 
+    @GetMapping
+    public String listAgents(Model model) {
+        model.addAttribute("agents", agentService.getAllAgents());
+        return "agent/agent-list";
+    }
+ 
+    @GetMapping("/add")
+    public String addAgentForm(Model model) {
+        model.addAttribute("agents", new DeliveryAgent());
+        return "agent/agent-add";
+    }
+ 
+    @GetMapping("/edit/{id}")
+    public String editAgent(@PathVariable Long id, Model model) {
+        model.addAttribute("agents", agentService.getAgentById(id));
+        return "agent/agent-edit";
+    }
+ 
+    @PostMapping("/save")
+    public String saveAgent(@ModelAttribute DeliveryAgent agent) {
+        agentService.saveAgent(agent);
+        return "redirect:/agents";
+    }
+ 
+    @GetMapping("/delete/{id}")
+    public String deleteAgent(@PathVariable Long id) {
+        agentService.deleteAgent(id);
+        return "redirect:/agents";
+    }
+}

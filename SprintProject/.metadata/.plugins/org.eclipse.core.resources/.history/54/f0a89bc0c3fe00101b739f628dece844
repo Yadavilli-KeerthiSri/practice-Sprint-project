@@ -1,0 +1,42 @@
+package com.cg.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.MenuItem;
+import com.cg.iservice.IMenuItemService;
+import com.cg.repository.MenuItemRepository;
+
+@Service
+public class MenuItemService implements IMenuItemService{
+	@Autowired
+    private MenuItemRepository menuItemRepository;
+ 
+    @Override
+    public MenuItem saveMenuItem(MenuItem item) {
+        return menuItemRepository.save(item);
+    }
+ 
+    @Override
+    public MenuItem getMenuItemById(Long id) {
+        return menuItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+    }
+ 
+    @Override
+    public List<MenuItem> getAllMenuItems() {
+        return menuItemRepository.findAll();
+    }
+ 
+    @Override
+    public void deleteMenuItem(Long id) {
+        menuItemRepository.deleteById(id);
+    }
+    
+//    @Override
+//    public List<MenuItem> getMenuItemsByRestaurant(Long restaurantId) {
+//        return menuItemRepository.findByRestaurant_RestaurantId(restaurantId);
+//    }
+}

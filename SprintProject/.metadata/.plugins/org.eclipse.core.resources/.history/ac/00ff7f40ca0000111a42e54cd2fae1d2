@@ -1,0 +1,81 @@
+package com.cg.controller.user;
+
+import com.cg.entity.Customer;
+import com.cg.entity.MenuItem;
+import com.cg.entity.Order;
+import com.cg.service.CustomerService;
+import com.cg.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/user/orders")
+public class UserOrderController {
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    /* CREATE (Place Order) */
+    @PostMapping("/place")
+    public String placeOrder(
+            @SessionAttribute("cart") Map<Long, CartItem> cart,
+            Authentication auth) {
+
+        Customer customer = customerService.getByEmail(auth.getName());
+
+        Order order = new Order();
+        order.setCustomer(customer);
+
+        List<MenuItem> items = new ArrayList<>();
+        double total = 0;
+
+        for (CartItem ci : cart.values()) {
+            for (int i = 0; i < ci.getQuantity(); i++) {
+                items.add(ci.getItem());
+            }
+            total += ci.getSubtotal();
+        }
+
+        order.setItems(items);
+        order.setTotalAmount(total);
+
+        orderService.place(order);
+        cart.clear();
+
+        return "redirect:/user/orders";
+    }
+
+    /* LIST */
+    @GetMapping
+    public String myOrders(Authentication auth, Model model) {
+
+        Customer customer = customerService.getByEmail(auth.getName());
+        model.addAttribute(
+                "orders",
+                orderService.getByCustomer(customer.getCustomerId())
+        );
+        return "user/orders";
+    }
+
+    /* VIEW */
+    @GetMapping("/{id}")
+    public String orderDetails(@PathVariable Long id, Model model) {
+        model.addAttribute("order", orderService.getById(id));
+        return "user/order-details";
+    }
+
+    /* DELETE (Cancel Order) */
+    @GetMapping("/cancel/{id}")
+    public String cancelOrder(@PathVariable Long id) {
+        orderService.cancel(id);
+        return "redirect:/user/orders";
+    }
+}

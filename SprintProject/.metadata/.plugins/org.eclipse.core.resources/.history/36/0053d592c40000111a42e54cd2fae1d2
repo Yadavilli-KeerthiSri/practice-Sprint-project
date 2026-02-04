@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Customers</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.container { margin:30px; }
+.card {
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; }
+table { width:100%; border-collapse:collapse; margin-top:15px; }
+th, td { padding:12px; border-bottom:1px solid #ddd; }
+th { background:#fff3e0; }
+.action { color:red; font-weight:bold; text-decoration:none; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="container">
+<div class="card">
+<h2>Customer List</h2>
+ 
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Address</th>
+<th>Action</th>
+</tr>
+ 
+<tr th:each="c : ${customers}">
+<td th:text="${c.customerId}"></td>
+<td th:text="${c.name}"></td>
+<td th:text="${c.email}"></td>
+<td th:text="${c.phone}"></td>
+<td th:text="${c.address}"></td>
+<td>
+<a class="action" th:href="@{/customers/delete/{id}(id=${c.customerId})}">Delete</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+ 
+</body>
+</html>

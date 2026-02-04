@@ -1,0 +1,48 @@
+package com.cg.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.Restaurant;
+import com.cg.exception.ResourceNotFound;
+import com.cg.iservice.IRestaurantService;
+import com.cg.repository.RestaurantRepository;
+
+@Service
+public class RestaurantService implements IRestaurantService{
+	@Autowired
+    private RestaurantRepository restaurantRepository;
+ 
+    @Override
+    public Restaurant createRestaurant(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
+ 
+    @Override
+    public Restaurant updateRestaurant(Integer id, Restaurant restaurant) throws ResourceNotFound {
+        Restaurant existing = getRestaurantById(id);
+        existing.setRestaurantName(restaurant.getRestaurantName());
+        existing.setAddressLocation(restaurant.getAddressLocation());
+        existing.setCuisine(restaurant.getCuisine());
+        existing.setRatings(restaurant.getRatings());
+        return restaurantRepository.save(existing);
+    }
+ 
+    @Override
+    public Restaurant getRestaurantById(Integer id) throws ResourceNotFound {
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Restaurant not found"));
+    }
+ 
+    @Override
+    public List<Restaurant> getAllRestaurants() {
+        return restaurantRepository.findAll();
+    }
+ 
+    @Override
+    public void deleteRestaurant(Integer id) throws ResourceNotFound {
+        restaurantRepository.delete(getRestaurantById(id));
+    }
+}

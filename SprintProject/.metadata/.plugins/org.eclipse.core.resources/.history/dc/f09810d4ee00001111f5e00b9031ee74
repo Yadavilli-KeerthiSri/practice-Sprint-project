@@ -1,0 +1,41 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.cg.entity.Customer;
+import com.cg.repository.CustomerRepository;
+
+@Controller
+public class AuthController {
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "auth/register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(Customer customer) {
+
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setRole("ROLE_USER");
+
+        customerRepository.save(customer);
+
+        return "redirect:/login";
+    }
+}

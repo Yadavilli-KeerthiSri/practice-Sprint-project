@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Profile</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="user/fragments/user-navbar :: userNavbar"></div>
+
+<h2>My Profile</h2>
+
+<p>Name: <span th:text="${user.customerName}"></span></p>
+<p>Email: <span th:text="${user.email}"></span></p>
+<p>Contact: <span th:text="${user.contact}"></span></p>
+<p>Address: <span th:text="${user.address}"></span></p>
+
+<a th:href="@{/user/profile/edit}">Edit Profile</a>
+
+</body>
+</html>

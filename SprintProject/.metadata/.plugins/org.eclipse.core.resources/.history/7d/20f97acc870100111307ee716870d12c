@@ -1,0 +1,93 @@
+package com.cg.service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.DeliveryAgent;
+import com.cg.entity.Order;
+import com.cg.enumeration.OrderStatus;
+import com.cg.iservice.IOrderService;
+import com.cg.repository.DeliveryAgentRepository;
+import com.cg.repository.OrderRepository;
+
+@Service
+public class OrderService implements IOrderService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private DeliveryAgentRepository deliveryAgentRepository;
+
+    @Override
+    public Order place(Order order) {
+        order.setOrderStatus(OrderStatus.PLACED);
+        order.setOrderDate(LocalDateTime.now());
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order updateStatus(Long orderId) {
+        // 1. Find the order or throw a descriptive error
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order ID " + orderId + " not found in database"));
+
+        switch (order.getOrderStatus()) {
+            case PLACED -> order.setOrderStatus(OrderStatus.PREPARING);
+            
+            case PREPARING -> {
+                // 2. Check for available agents safely
+                DeliveryAgent agent = deliveryAgentRepository
+                        .findFirstByAvailabilityTrue()
+                        .orElse(null); // Don't crash if no agent is free
+
+                if (agent == null) {
+                    throw new RuntimeException("No delivery agents are currently available!");
+                }
+
+                agent.setAvailability(false);
+                deliveryAgentRepository.save(agent); // Ensure agent status is updated
+                order.setDeliveryAgent(agent);
+                order.setOrderStatus(OrderStatus.PICKED_UP);
+            }
+            
+            case PICKED_UP -> order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
+            
+            case OUT_FOR_DELIVERY -> {
+                order.setOrderStatus(OrderStatus.DELIVERED);
+                if (order.getDeliveryAgent() != null) {
+                    order.getDeliveryAgent().setAvailability(true);
+                    deliveryAgentRepository.save(order.getDeliveryAgent());
+                }
+            }
+            default -> throw new IllegalStateException("Order is already Delivered or Cancelled.");
+        }
+
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public void cancel(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public Order getById(Long id) {
+        return orderRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<Order> getByCustomer(Long customerId) {
+        return orderRepository.findByCustomerCustomerId(customerId);
+    }
+
+    @Override
+    public List<Order> getAll() {
+        return orderRepository.findAll();
+    }
+}

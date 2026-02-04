@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+ 
+<div style="
+    background:#ffffff;
+    padding:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+">
+ 
+    <h3 style="color:#ff5722;">Food Delivery</h3>
+ 
+    <div th:replace="fragments/navbar :: body"></div>
+ 
+<div style=" ">
+    <h3 style=" ">Food Delivery</h3>
+    <div>
+        <!-- ADMIN LINKS -->
+        <span sec:authorize="hasRole('ADMIN')">
+            <!-- Keep admin-specific links here, like menu management -->
+            <a href="/menu" style="margin-right:15px;">Menu Management</a>
+            <a href="/agents" style="margin-right:15px;">Delivery Agents</a>
+        </span>
+ 
+        <!-- USER & COMMON LINKS -->
+        <span sec:authorize="hasAnyRole('USER', 'ADMIN')">
+            <!-- Move the link here so both roles see it -->
+            <a href="/restaurants" style="margin-right:15px;">Restaurants</a> 
+            <a href="/orders" style="margin-right:15px;">My Orders</a>
+            <a href="/payments" style="margin-right:15px;">Payments</a>
+        </span>
+ 
+        <a href="/logout" style="color:red;">Logout</a>
+        <a href="/profile" style="margin-right:15px;">Profile</a>
+    </div>
+</div>
+</div>
+ 
+</body>
+</html>

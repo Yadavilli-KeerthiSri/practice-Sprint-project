@@ -1,0 +1,69 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.cg.entity.OrderStatus;
+import com.cg.exception.ResourceNotFound;
+import com.cg.service.DeliveryAgentService;
+import com.cg.service.OrderService;
+import com.cg.service.PaymentService;
+import com.cg.service.RestaurantService;
+import com.cg.service.UserService;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+	@Autowired
+    private RestaurantService restaurantService;
+ 
+    @Autowired
+    private DeliveryAgentService agentService;
+ 
+    @Autowired
+    private OrderService orderService;
+ 
+    @Autowired
+    private PaymentService paymentService;
+ 
+    @Autowired
+    private UserService userService;
+ 
+    // DASHBOARD
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("restaurants", restaurantService.getAllRestaurants().size());
+        model.addAttribute("agents", agentService.getAllAgents().size());
+        model.addAttribute("orders", orderService.getAllOrders().size());
+        model.addAttribute("users", userService.getAllUsers().size());
+        return "admin/dashboard";
+    }
+ 
+    // VIEW ALL ORDERS
+    @GetMapping("/orders")
+    public String orders(Model model) {
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "admin/orders";
+    }
+ 
+    // UPDATE ORDER STATUS
+    @PostMapping("/orders/status/{id}")
+    public String updateOrderStatus(@PathVariable Integer id,
+                                    @RequestParam OrderStatus status) throws ResourceNotFound {
+        orderService.updateOrderStatus(id, status);
+        return "redirect:/admin/orders";
+    }
+ 
+    // VIEW USERS
+    @GetMapping("/users")
+    public String users(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "admin/users";
+    }
+}

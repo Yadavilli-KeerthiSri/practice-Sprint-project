@@ -1,0 +1,39 @@
+package com.cg.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.cg.entity.User;
+import com.cg.exception.ResourceNotFound;
+import com.cg.iservice.IUserService;
+import com.cg.repository.UserRepository;
+
+@Service
+public class UserService implements IUserService{
+	 @Autowired
+	    private UserRepository userRepository;
+	 
+	    @Autowired
+	    private PasswordEncoder encoder;
+	 
+	    @Override
+	    public User registerUser(User user) {
+	        user.setPassword(encoder.encode(user.getPassword()));
+	        user.setRole("ROLE_USER");
+	        return userRepository.save(user);
+	    }
+	 
+	    @Override
+	    public User findByUsername(String username) throws ResourceNotFound {
+	        return userRepository.findByUsername(username)
+	                .orElseThrow(() -> new ResourceNotFound("User not found"));
+	    }
+	 
+	    @Override
+	    public List<User> getAllUsers() {
+	        return userRepository.findAll();
+	    }
+}

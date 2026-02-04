@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"> <!-- Added Security Namespace -->
+<head>
+    <title>Customer Management</title>
+</head>
+<body>
+
+<!-- NAVIGATION MENU START -->
+<h2>Food Delivery System</h2>
+<nav>
+    <a href="/customers">Customers</a> |
+    <a href="/restaurants">Restaurants</a> |
+    <a href="/menu-items">Menu</a> |
+    <a href="/orders">Orders</a> |
+    <a href="/payments">Payments</a> |
+    <a href="/agents">Agents</a> |
+
+    <!-- Only visible to Admins -->
+    <span sec:authorize="hasRole('ADMIN')">
+      <a href="/admin/dashboard">Admin Dashboard</a> |
+    </span>
+
+    <a href="/logout">Logout</a>
+</nav>
+<hr>
+<!-- NAVIGATION MENU END -->
+
+<h3>Add Customer</h3>
+<form th:action="@{/customers/add}" method="post" enctype="multipart/form-data">
+    Name: <input name="customerName" required><br>
+    Contact: <input name="contact"><br>
+    Email: <input name="email" type="email"><br>
+    Address: <input name="address"><br>
+    Profile Image: <input type="file" name="image"><br><br>
+    <button type="submit">Add Customer</button>
+</form>
+
+<hr>
+
+<h3>Customer List</h3>
+<table border="1">
+    <tr>
+        <th>Name</th><th>Email</th><th>Action</th>
+    </tr>
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.customerName}"></td>
+        <td th:text="${c.email}"></td>
+        <td>
+            <a th:href="@{/customers/delete/{id}(id=${c.customerId})}" 
+               onclick="return confirm('Are you sure?')";>Delete</a>
+        </td>
+    </tr>
+</table>
+
+<p align="center">© Food Delivery System</p>
+</body>
+</html>

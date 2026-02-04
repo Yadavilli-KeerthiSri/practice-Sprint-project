@@ -1,0 +1,13 @@
+package com.cg.enumeration;
+
+public enum OrderStatus {
+	PENDING,
+	PLACED,
+    CONFIRMED,
+    PREPARING,
+    PICKED_UP,
+    OUT_FOR_DELIVERY,
+    DELIVERED,
+    CANCELLED,
+    REFUNDED
+}

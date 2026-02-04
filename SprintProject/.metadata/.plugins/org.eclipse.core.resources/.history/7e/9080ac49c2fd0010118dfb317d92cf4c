@@ -1,0 +1,12 @@
+package com.cg.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.cg.entity.Customer;
+
+import java.util.Optional;
+
+public interface ICustomerRepository extends JpaRepository<Customer, Long> {
+    boolean existsByEmail(String email);
+    Optional<Customer> findByEmail(String email);
+}

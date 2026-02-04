@@ -1,0 +1,56 @@
+package com.cg.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cg.entity.MenuItem;
+import com.cg.service.MenuItemService;
+import com.cg.service.RestaurantService;
+
+@Controller
+@RequestMapping("/menuitems")
+public class MenuItemController {
+	@Autowired
+    private MenuItemService menuItemService;
+ 
+    @Autowired
+    private RestaurantService restaurantService;
+ 
+    @GetMapping
+    public String listMenuItems(Model model) {
+        model.addAttribute("menuItems", menuItemService.getAllMenuItems());
+        return "menuitem/menuitem-list";
+    }
+ 
+    @GetMapping("/add")
+    public String addMenuItemForm(Model model) {
+        model.addAttribute("menuItem", new MenuItem());
+        model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+        return "menuitem/menuitem-add";
+    }
+ 
+    @GetMapping("/edit/{id}")
+    public String editMenuItem(@PathVariable Long id, Model model) {
+        model.addAttribute("menuItem", menuItemService.getMenuItemById(id));
+        model.addAttribute("restaurants", restaurantService.getAllRestaurants());
+        return "menuitem/menuitem-edit";
+    }
+ 
+    @PostMapping("/save")
+    public String saveMenuItem(@ModelAttribute MenuItem menuItem) {
+        menuItemService.saveMenuItem(menuItem);
+        return "redirect:/menuitems";
+    }
+ 
+    @GetMapping("/delete/{id}")
+    public String deleteMenuItem(@PathVariable Long id) {
+        menuItemService.deleteMenuItem(id);
+        return "redirect:/menuitems";
+    }
+}

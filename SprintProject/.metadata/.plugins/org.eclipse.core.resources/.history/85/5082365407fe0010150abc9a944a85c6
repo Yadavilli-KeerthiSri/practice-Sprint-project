@@ -1,0 +1,21 @@
+package com.cg.iservice;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.cg.entity.Order;
+import com.cg.exception.ResourceNotFound;
+
+public interface IOrderService {
+	 Order placeOrder(Order order);
+	 
+	 Order updateOrderStatus(Integer orderId, String status);
+	 
+	 Order getOrderById(Integer orderId);
+	 
+	 List<Order> getAllOrders();
+	 
+	 List<Order> getOrdersByCustomer(Integer customerId);
+	 
+	 void cancelOrder(Integer orderId);
+}

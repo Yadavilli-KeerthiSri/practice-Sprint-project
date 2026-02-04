@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Successful</title>
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+</head>
+<body>
+<div th:replace="fragments/user-navbar :: userNavbar"></div>
+
+<div class="card">
+    <h2>🎉 Payment Successful</h2>
+
+    <p class="success">
+        Your order has been placed successfully!
+    </p>
+
+    <a th:href="@{/user/orders}">
+        <button>View My Orders</button>
+    </a>
+</div>
+
+</body>
+</html>

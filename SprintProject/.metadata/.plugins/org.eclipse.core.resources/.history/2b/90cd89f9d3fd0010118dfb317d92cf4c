@@ -1,0 +1,15 @@
+package com.cg.iservice;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.cg.entity.Order;
+import com.cg.exception.ResourceNotFound;
+
+public interface IOrderService {
+    Order create(Order order);
+    Optional<Order> getById(Long orderId);
+    List<Order> getAll();
+    Order update(Long orderId, Order order);
+    void delete(Long orderId) throws ResourceNotFound;
+}

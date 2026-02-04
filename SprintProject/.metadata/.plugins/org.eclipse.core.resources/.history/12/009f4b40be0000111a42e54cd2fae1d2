@@ -1,0 +1,12 @@
+package com.cg.iservice;
+
+import java.util.List;
+
+import com.cg.entity.DeliveryAgent;
+
+public interface IDeliveryAgentService {
+	DeliveryAgent saveAgent(DeliveryAgent agent);
+    DeliveryAgent getAgentById(Long id);
+    List<DeliveryAgent> getAllAgents();
+    void deleteAgent(Long id);
+}

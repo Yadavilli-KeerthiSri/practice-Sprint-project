@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+
+<!-- ADMIN NAVBAR -->
+<div th:replace="fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Welcome, Admin 👨‍💼</h2>
+
+<p>Use the menu above to manage the application.</p>
+
+</body>
+</html>

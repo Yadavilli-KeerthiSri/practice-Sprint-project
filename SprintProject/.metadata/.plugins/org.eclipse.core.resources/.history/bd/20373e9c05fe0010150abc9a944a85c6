@@ -1,0 +1,13 @@
+package com.cg.iservice;
+
+public interface IRestaurantService {
+	 Restaurant createRestaurant(Restaurant restaurant);
+	 
+	 Restaurant updateRestaurant(Integer id, Restaurant restaurant);
+	 
+     Restaurant getRestaurantById(Integer id);
+	 
+	 List<Restaurant> getAllRestaurants();
+	 
+	 void deleteRestaurant(Integer id);
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ 
+<h3>Add Delivery Agent</h3>
+ 
+<form th:action="@{/agents/add}" method="post" enctype="multipart/form-data">
+    Name: <input name="agentName"><br>
+    Contact: <input name="contact"><br>
+    Vehicle: <input name="vehicleDetails"><br>
+    Availability: <input name="availability"><br>
+    Agent Photo: <input type="file" name="image"><br><br>
+    <button>Add Agent</button>
+</form>
+ 
+<hr>
+ 
+<table border="1">
+<tr>
+<th>Name</th><th>Vehicle</th><th>Action</th>
+</tr>
+ 
+<tr th:each="a : ${agents}">
+<td th:text="${a.agentName}"></td>
+<td th:text="${a.vehicleDetails}"></td>
+<td>
+<a th:href="@{/agents/delete/{id}(id=${a.agentId})}">Delete</a>
+</td>
+</tr>
+</table>
+ 
+</body>
+</html>

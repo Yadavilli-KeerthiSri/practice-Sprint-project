@@ -1,0 +1,37 @@
+package com.cg.controller;
+
+import org.hibernate.mapping.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.cg.entity.Order;
+import com.cg.entity.OrderStatus;
+import com.cg.service.OrderService;
+
+@Controller
+@RequestMapping("/admin/orders")
+public class OrderAdminController {
+	@Autowired
+    private OrderService orderService;
+ 
+	@GetMapping("/admin/dashboard")
+	public String showDashboard(Model model) {
+	    List<Order> orders = orderService.getAllOrders(); // Fetch your data
+	    model.addAttribute("orders", orders); // Must match the name in th:each
+	    return "dashboard";
+	}
+
+    @PostMapping("/update-status")
+    public String updateStatus(
+            @RequestParam Long orderId,
+            @RequestParam OrderStatus status) {
+ 
+        orderService.updateOrderStatus(orderId, status);
+        return "redirect:/orders/order/order-history";
+    }
+}

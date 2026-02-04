@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restaurants</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="admin/fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Restaurants</h2>
+
+<a th:href="@{/admin/restaurants/add}">➕ Add Restaurant</a>
+<br><br>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Cuisine</th>
+        <th>Rating</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="r : ${restaurants}">
+        <td th:text="${r.restaurantName}"></td>
+        <td th:text="${r.location}"></td>
+        <td th:text="${r.cuisine}"></td>
+        <td th:text="${r.ratings}"></td>
+        <td>
+            <a th:href="@{/admin/restaurants/edit/{id}(id=${r.restaurantId})}">Edit</a>
+            |
+            <a th:href="@{/admin/restaurants/delete/{id}(id=${r.restaurantId})}"
+               onclick="return confirm('Delete this restaurant?')";>Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

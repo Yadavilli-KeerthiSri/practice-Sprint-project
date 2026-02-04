@@ -1,0 +1,5 @@
+package com.cg.iservice;
+
+public interface IMenuItemService {
+
+}

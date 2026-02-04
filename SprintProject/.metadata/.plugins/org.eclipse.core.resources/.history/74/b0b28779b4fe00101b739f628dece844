@@ -1,0 +1,63 @@
+package com.cg.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "payment_2")
+public class Payment {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paymentId;
+ 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentMethod method;
+ 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransactionStatus status;
+ 
+    @Column
+    private double amount;
+ 
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    //getters and setters
+	public Long getPaymentId() {
+		return paymentId;
+	}
+	public void setPaymentId(Long paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public PaymentMethod getMethod() {
+		return method;
+	}
+	public void setMethod(PaymentMethod method) {
+		this.method = method;
+	}
+
+	public TransactionStatus getStatus() {
+		return status;
+	}
+	public void setStatus(TransactonStatus status) {
+		this.status = status;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public Order getOrder() {
+		return order;
+	}
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+}
+

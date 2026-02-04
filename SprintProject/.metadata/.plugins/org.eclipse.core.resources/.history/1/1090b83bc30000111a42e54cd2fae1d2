@@ -1,0 +1,21 @@
+package com.cg.entity;
+
+import com.cg.entity.MenuItem;
+
+public class CartItem {
+
+    private MenuItem item;
+    private int quantity;
+
+    public CartItem(MenuItem item) {
+        this.item = item;
+        this.quantity = 1;
+    }
+
+    public double getSubtotal() {
+        return item.getPrice() * quantity;
+    }
+
+    // getters & setters
+}
+

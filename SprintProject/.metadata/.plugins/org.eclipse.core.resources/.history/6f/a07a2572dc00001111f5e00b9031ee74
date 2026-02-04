@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders</title>
+</head>
+<body>
+<!-- ADMIN NAVBAR -->
+<div th:replace="admin/fragments/admin-navbar :: adminNavbar"></div>
+
+<h2>Orders</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Payment</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="o : ${orders}">
+        <td th:text="${o.orderId}"></td>
+        <td th:text="${o.customer.customerName}"></td>
+        <td th:text="${o.orderStatus}"></td>
+        <td th:text="${o.totalAmount}"></td>
+        <td th:text="${o.payment.paymentMethod}"></td>
+        <td th:text="${o.payment.transactionStatus}"></td>     
+        <td>
+            <form th:action="@{/admin/orders/update/{id}(id=${o.orderId})}" method="post">
+                <button type="submit">Next Status</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

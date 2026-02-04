@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cart</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<div th:replace="fragments/user-navbar :: userNavbar"></div>
+
+<h2>Your Cart</h2>
+
+<table border="1">
+    <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th>Subtotal</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="ci : ${cartItems}">
+        <td th:text="${ci.item.itemName}"></td>
+        <td>₹<span th:text="${ci.item.price}"></span></td>
+        <td>
+            <a th:href="@{/user/cart/decrease/{id}(id=${ci.item.itemId})}">−</a>
+            <span th:text="${ci.quantity}"></span>
+            <a th:href="@{/user/cart/increase/{id}(id=${ci.item.itemId})}">+</a>
+        </td>
+        <td>₹<span th:text="${ci.subtotal}"></span></td>
+        <td>
+            <a th:href="@{/user/cart/remove/{id}(id=${ci.item.itemId})}">
+                Remove
+            </a>
+        </td>
+    </tr>
+</table>
+
+<h3>Total: ₹<span th:text="${total}"></span></h3>
+
+<form th:action="@{/user/orders/place}" method="post">
+    <button type="submit">Proceed to Payment</button>
+</form>
+
+</body>
+</html>

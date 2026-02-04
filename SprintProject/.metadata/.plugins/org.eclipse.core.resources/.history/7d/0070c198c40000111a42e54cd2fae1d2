@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Add Delivery Agent</title>
+<style>
+body { background:#f4f6f8; font-family:Arial; }
+.card {
+  width:420px; margin:40px auto; background:white;
+  padding:25px; border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+h2 { color:#ff5722; text-align:center; }
+input, button {
+  width:100%; padding:10px; margin-top:12px;
+  border-radius:6px; border:1px solid #ccc;
+}
+button { background:#ff5722; color:white; border:none; }
+</style>
+</head>
+<body>
+ 
+<div th:replace="fragments/navbar :: body"></div>
+ 
+<div class="card">
+<h2>Add Delivery Agent</h2>
+ 
+<form action="/agents/save" method="post">
+<input name="name" placeholder="Agent Name" required>
+<input name="phone" placeholder="Phone Number" required>
+<input name="vehicle" placeholder="Vehicle Details" required>
+<button>Add Agent</button>
+</form>
+</div>
+ 
+</body>
+</html>

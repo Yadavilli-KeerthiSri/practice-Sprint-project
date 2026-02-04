@@ -1,0 +1,67 @@
+package com.cg.service;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.cg.dto.OrderDTO;
+import com.cg.entity.Customer;
+import com.cg.entity.Order;
+import com.cg.entity.OrderStatus;
+import com.cg.exception.ResourceNotFound;
+import com.cg.iservice.IOrderService;
+import com.cg.repository.CustomerRepository;
+import com.cg.repository.OrderRepository;
+
+@Service
+public class OrderService implements IOrderService{
+	@Autowired
+    private OrderRepository orderRepository;
+ 
+    @Autowired
+    private CustomerRepository customerRepository;
+ 
+    @Override
+    public Order placeOrder(Order order) {
+        order.setOrderDate(new Date());
+        order.setOrderStatus("PLACED");
+        return orderRepository.save(order);
+    }
+ 
+    @Override
+    public Order updateOrderStatus(Integer orderId, String status) {
+        Order order = getOrderById(orderId);
+        order.setOrderStatus(status);
+        return orderRepository.save(order);
+    }
+ 
+    @Override
+    public Order getOrderById(Integer orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFound("Order not found"));
+    }
+ 
+    @Override
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+ 
+    @Override
+    public List<Order> getOrdersByCustomer(Integer customerId) {
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFound("Customer not found"))
+                .getOrders();
+    }
+ 
+    @Override
+    public void cancelOrder(Integer orderId) {
+        OrderEntity order = getOrderById(orderId);
+        order.setStatus("CANCELLED");
+        orderRepository.save(order);
+    }
+}

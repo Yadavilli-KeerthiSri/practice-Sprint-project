@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Form</title>
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; padding-top: 50px; }
+        .form-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 600px; margin: auto; }
+        .error-msg { color: #dc3545; font-size: 0.875rem; margin-top: 0.25rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-card">
+        <h2 class="mb-4 text-center" th:text="${customer.customerId == null ? 'Add Customer' : 'Update Customer'}">Form</h2>
+        <hr>
+        <form th:action="@{/customers/save}" th:object="${customer}" method="post">
+            <input type="hidden" th:field="*{customerId}" />
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Full Name</label>
+                <input type="text" th:field="*{customerName}" class="form-control" th:errorclass="is-invalid" placeholder="Enter name" />
+                <div class="error-msg" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Error</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Email Address</label>
+                <input type="email" th:field="*{email}" class="form-control" th:errorclass="is-invalid" placeholder="name@example.com" />
+                <div class="error-msg" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Contact Number</label>
+                <input type="text" th:field="*{contacts}" class="form-control" th:errorclass="is-invalid" placeholder="Phone number" />
+                <div class="error-msg" th:if="${#fields.hasErrors('contacts')}" th:errors="*{contacts}">Error</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Address</label>
+                <textarea th:field="*{address}" class="form-control" th:errorclass="is-invalid" rows="3" placeholder="Enter full address"></textarea>
+                <div class="error-msg" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Error</div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/customers}" class="btn btn-secondary">Back to List</a>
+                <button type="submit" class="btn btn-success px-4">Save Customer</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
